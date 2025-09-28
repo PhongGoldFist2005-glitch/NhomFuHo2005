@@ -4,7 +4,7 @@ package Arkanoid;
 abstract class GameObject {
     // Định nghĩa tọa đồ trong màn hình chơi
     protected float x, y;
-    // Giới hạn chiều rộng, chiều cao trong giao diện game
+    // Giới hạn chiều rộng, chiều cao của vật thể trong giao diện game
     protected float width, height;
 
     public GameObject(float x, float y, float width, float height) {
