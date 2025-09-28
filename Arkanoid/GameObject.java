@@ -7,7 +7,7 @@ abstract class GameObject {
     // Giới hạn chiều rộng, chiều cao trong giao diện game
     protected float width, height;
 
-    GameObject(float x, float y, float width, float height) {
+    public GameObject(float x, float y, float width, float height) {
         this.x = x;
         this.y = y;
         this.width = width;
