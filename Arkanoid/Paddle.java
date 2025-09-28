@@ -8,10 +8,7 @@ public class Paddle extends MovableObject {
 	protected float currentPowerUp;
 
 	public Paddle(float x, float y, float high, float width, float speed, float currentPowerUp) {
-		this.x = x;
-		this.y = y;
-		this.high = high;
-		this.width = width;
+		super(x, y, high, width);
 		this.speed = speed;
 		this.currentPowerUp = currentPowerUp;
 	}
