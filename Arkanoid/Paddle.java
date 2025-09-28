@@ -7,7 +7,7 @@ public class Paddle extends MovableObject {
 	// Tham số thể hiện nâng cấp cho thanh đỡ
 	protected float currentPowerUp;
 
-	Paddle(float x, float y, float high, float width, float speed, float currentPowerUp) {
+	public Paddle(float x, float y, float high, float width, float speed, float currentPowerUp) {
 		this.x = x;
 		this.y = y;
 		this.high = high;
