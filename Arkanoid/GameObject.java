@@ -8,9 +8,13 @@ abstract class GameObject {
     protected int width, height;
 
     // Method dùng để update các thông tin trong gameplay
-    public abstract void update();
+    public abstract void update() {
+        // pass
+    };
 
     // Method dùng để hiện thị gameplay.
-    public abstract void render();
+    public abstract void render() {
+        // pass
+    };
 }
 
