@@ -15,13 +15,9 @@ abstract class GameObject {
     }
 
     // Method dùng để update các thông tin trong gameplay
-    public abstract void update() {
-        // pass
-    }
+    public abstract void update();
 
     // Method dùng để hiện thị gameplay.
-    public abstract void render() {
-        // pass
-    }
+    public abstract void render();
 }
 
