@@ -1,6 +1,6 @@
 package Arkanoid;
 
-// Vât phẩm nâng cấp sức mạnh của quả bóng
+// Vât phẩm nâng cấp sức mạnh rơi ra khi phá gạch cho quả bóng hoặc ván.
 public class PowerUp extends GameObject {
     protected int type;
     protected float duration;
