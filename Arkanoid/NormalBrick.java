@@ -9,4 +9,14 @@ public class NormalBrick extends Brick {
     public NormalBrick() {
         super(this.hitPoints, this.type);
     }
+
+    @Override
+	public void update() {
+		// TODO: Cập nhật trạng thái của gạch
+	}
+
+	@Override
+	public void render() {
+		// TODO: Vẽ gạch lên màn hình
+	}
 }
