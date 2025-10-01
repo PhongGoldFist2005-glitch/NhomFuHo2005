@@ -6,6 +6,10 @@ public class Brick extends GameObject {
 	private int hitPoints;
 	protected int type;
 
+	public Brick(int hitPoints, int type) {
+		this.hitPoints = hitPoints;
+		this.type = type;
+	}
 	// Kiểm tra xem viên gạch đã bị tấn công bao nhiêu lần để trừ máu 
 	public void takeHit() {
 		// pass
