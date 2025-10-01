@@ -15,8 +15,7 @@ public class Paddle extends MovableObject {
 	
 	@Override
 	public void update() {
-		// TODO: Cập nhật vị trí hoặc trạng thái của thanh đỡ
-		move();
+		// TODO: Cập nhật trạng thái của thanh đỡ
 	}
 
 	@Override
@@ -24,6 +23,11 @@ public class Paddle extends MovableObject {
 		// TODO: Vẽ thanh đỡ lên màn hình
 	}
 
+	@Override
+	public void move() {
+		// TODO: di chuyển thanh đỡ trên màn hình
+	}
+	
 	// Phương thức cho thanh di chuyển sang bên trái
 	public void moveLeft() {
 		// pass
