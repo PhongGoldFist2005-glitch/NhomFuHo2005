@@ -8,4 +8,14 @@ public class StrongBrick extends Brick {
     public StrongBrick() {
         super(this.hitPoints, this.type);
     }
+
+    @Override
+	public void update() {
+		// TODO: Cập nhật trạng thái của gạch
+	}
+
+	@Override
+	public void render() {
+		// TODO: Vẽ gạch lên màn hình
+	}
 }
