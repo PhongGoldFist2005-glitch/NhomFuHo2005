@@ -1,6 +1,6 @@
 package Arkanoid;
 
-// Xây dựng lớp gạch thường
+// Xây dựng lớp gạch thường.
 public class NormalBrick extends Brick {
     int hitPoints = 1;
     int type = 0;
