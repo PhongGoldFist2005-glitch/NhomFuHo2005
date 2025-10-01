@@ -17,14 +17,18 @@ public class Ball extends MovableObject {
 	
 	@Override
 	public void update() {
-		// TODO: Cập nhật vị trí hoặc trạng thái của bóng
-		move();
+		// TODO: Cập nhật trạng thái của bóng
 	}
 
 	@Override
 	public void render() {
 		// TODO: Vẽ bóng lên màn hình
 		// Ví dụ: System.out.println("Vẽ bóng tại (" + x + ", " + y + ")");
+	}
+
+	@Override
+	public void move() {
+		// Cập nhật vị trí của bóng
 	}
 
 	// Xử lý quả bóng khi va chạm
