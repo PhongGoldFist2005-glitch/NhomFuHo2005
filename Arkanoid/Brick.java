@@ -3,7 +3,7 @@ package Arkanoid;
 // Xây dựng class Brick
 public class Brick extends GameObject {
 	// Thông tin chứa máu của viên gạch và loại gạch
-	private int hitPoints;
+	protected int hitPoints;
 	protected int type;
 
 	public Brick(int hitPoints, int type) {
