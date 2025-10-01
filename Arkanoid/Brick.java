@@ -1,6 +1,6 @@
 package Arkanoid;
 
-// Xây dựng class Brick
+// Xây dựng class Brick.
 public class Brick extends GameObject {
 	// Thông tin chứa máu của viên gạch và loại gạch
 	protected int hitPoints;
