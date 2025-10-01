@@ -8,4 +8,5 @@ public class ExpandPaddlePowerUp extends PowerUp {
     public GameObject(float x, float y, float width, float height) {
         super(x, y, width, height, this.type, this.duration);
     }
+    // override 3 cái cơ bản & override cho cái nhận sức mạnh
 }
