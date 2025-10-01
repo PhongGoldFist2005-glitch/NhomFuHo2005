@@ -12,8 +12,5 @@ abstract class MovableObject extends GameObject {
     }
 
     // Method dùng để biểu diễu thao tác vật lý di chuyển của vật thể
-    public void move() {
-        x += dx;
-        y += dy;
-    }
+    public abstract void move();
 }
