@@ -1,4 +1,4 @@
-package Arkanoid;
+package game.entities;
 
 // Vât phẩm nâng cấp sức mạnh rơi ra khi phá gạch cho quả bóng hoặc ván.
 public class PowerUp extends GameObject {

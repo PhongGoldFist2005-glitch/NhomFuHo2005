@@ -1,4 +1,4 @@
-package Arkanoid;
+package game.entities;
 
 // Xây dựng lớp ball.
 public class Ball extends MovableObject {

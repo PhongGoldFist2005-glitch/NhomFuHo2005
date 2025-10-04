@@ -1,4 +1,4 @@
-package Arkanoid;
+package game.entities;
 
 public class ExpandPaddlePowerUp extends PowerUp {
     protected int type = 0;

@@ -1,0 +1,17 @@
+project-root/
+│── src/                 # Mã nguồn chính
+│   ├── game/            # Package chính của game
+│   │   ├── core/        # Lõi game (loop, render, input)
+│   │   ├── entities/    # Các thực thể (Ball, Paddle, Brick...)
+│   │   ├── levels/      # Quản lý màn chơi
+│   │   ├── ui/          # Giao diện (Menu, Score, HUD)
+│   │   └── utils/       # Tiện ích (collision, constants)
+│── assets/              # Tài nguyên
+│   ├── images/          # Ảnh, sprites
+│   ├── sounds/          # Âm thanh
+│   └── fonts/           # Font chữ
+│── lib/                 # Thư viện ngoài (nếu có)
+│── docs/                # Tài liệu, thiết kế
+│── build/               # File build ra (class, jar, exe)
+│── README.md            # Hướng dẫn
+│── config.json          # File cấu hình game (nếu cần)

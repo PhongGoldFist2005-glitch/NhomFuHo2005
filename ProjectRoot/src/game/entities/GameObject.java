@@ -1,11 +1,14 @@
-package Arkanoid;
+package game.entities;
+
+import java.awt.Graphics2D;
 
 // Lớp trừu tượng chung cho mọi đối tượng trong game.
 abstract class GameObject {
     // Định nghĩa tọa đồ trong màn hình chơi
     protected float x, y;
     // Giới hạn chiều rộng, chiều cao của vật thể trong giao diện game
-    protected float width, height;
+    protected float width;
+    protected float height;
 
     public GameObject(float x, float y, float width, float height) {
         this.x = x;
@@ -18,6 +21,6 @@ abstract class GameObject {
     public abstract void update();
 
     // Method dùng để hiện thị gameplay.
-    public abstract void render();
+    public abstract void render(Graphics2D g2);
 }
 

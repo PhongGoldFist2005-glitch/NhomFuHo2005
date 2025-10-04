@@ -1,12 +1,11 @@
-package Arkanoid;
+package game.entities;
 
-// Xây dựng lớp gạch thường.
-public class NormalBrick extends Brick {
-    int hitPoints = 1;
-    int type = 0;
+// Xây dựng lớp gạch có máu khỏe hơn
+public class StrongBrick extends Brick {
+    protected int hitPoints = 2;
+    protected int type = 1;
 
-    // Gạch thường chỉ có 1 máu và loại 0
-    public NormalBrick() {
+    public StrongBrick() {
         super(this.hitPoints, this.type);
     }
 

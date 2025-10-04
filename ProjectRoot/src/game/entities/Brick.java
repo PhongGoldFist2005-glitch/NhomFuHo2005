@@ -1,4 +1,4 @@
-package Arkanoid;
+package game.entities;
 
 // Xây dựng class Brick.
 public class Brick extends GameObject {
@@ -17,7 +17,7 @@ public class Brick extends GameObject {
 
 	// Kiểm tra xem viên gạch đã bị tiêu diệt hay chưa
 	public boolean isDestroyed() {
-		// pass
+		// TODO: pass
 	}
 	
 	@Override
