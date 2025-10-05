@@ -6,7 +6,7 @@ public class PowerUp extends GameObject {
     protected float duration;
 
     // Xây dựng vật thể nâng cấp
-    public GameObject(float x, float y, float width, float height, int type, float duration) {
+    public PowerUp(float x, float y, float width, float height, int type, float duration) {
         super(x, y, width, height);
         this.type = type;
         this.duration = duration;
