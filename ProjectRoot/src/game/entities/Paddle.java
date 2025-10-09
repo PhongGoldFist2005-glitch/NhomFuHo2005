@@ -16,8 +16,8 @@ public class Paddle extends MovableObject {
 	// Các giá trị mặc định ban đầu
     protected float defaultX = gameManager.getBoardWidth() / 2;
     protected float defaultY = gameManager.getBoardHeight();
-    protected float defaultWidth = 32;
-    protected float defaultHeight = 20;
+    protected float defaultWidth = 80;
+    protected float defaultHeight = 10;
     protected float defaultSpeed = 4;
     protected int defaultPowerUp = 1;
 
@@ -25,7 +25,11 @@ public class Paddle extends MovableObject {
 		this.keyH = keyH;
 		this.gameManager = gameManager;
         // Truyền giá trị mặc định ban đầu cho super
-        super(480, 740, 32, 20, 4, 4);
+		float startWidth = gameManager.getBoardWidth() / 2;
+		float startHeight = gameManager.getBoardHeight();
+		// Để hiện thị chiều cao của thanh trượt
+		// lấy chiều cao toàn màn hình - chiều cao của vật thể
+        super(startWidth, startHeight - 15, 80, 10, 4, 4);
         this.currentPowerUp = defaultPowerUp;
     }
 
@@ -53,7 +57,7 @@ public class Paddle extends MovableObject {
 	 */
 	@Override
 	public void render(Graphics2D g2) {
-		g2.setColor(Color.GREEN);
+		g2.setColor(Color.decode("#CC00FF"));
         g2.fillRect((int) this.x,(int) this.y,(int) this.width,(int) this.height);
 	}
 

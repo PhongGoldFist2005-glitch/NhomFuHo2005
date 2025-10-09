@@ -2,40 +2,49 @@ package game.core;
 
 import javax.swing.JPanel;
 
+import game.entities.NormalBrick;
 import game.entities.Paddle;
+import game.entities.StrongBrick;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameManager extends JPanel implements Runnable {
     // widthPix, heightPix (Dựa trên kích thước của gạch)
     // là kích thước của nhân vật thực tế.
     private final int widthPix = 16;
-    private final int heightPix = 14;
+    private final int heightPix = 10;
     // scale là hệ số để scale kích thước của nhân vật.
     private final int scale = 3;
     // rowCount, colCount là số hàng và số cột tối đa của màn hình game.
     // Yêu cầu đủ kích thước để bỏ hết đống gạch vào trong màn hình.
     private final int rowCount =  20;
     private final int colCount = 18;
+    // Chiều rộng chiều cao thực tế của gạch
+    int brickWidth = widthPix * scale;
+    int brickHeight = heightPix * scale;
     // Kích thước của toàn màn hình
-    private int boardWidth = widthPix * scale * rowCount;
-    private int boardHeight = heightPix * scale * colCount;
+    // Scale
+    private int offset = 250;
+    private float boardWidth = widthPix * scale * rowCount + 2 * offset;
+    private float boardHeight = heightPix * scale * colCount + offset / 2;
 
     // FPS của trò chơi: (Từng khung hình vẽ trên 1 giây)
     private final int FPS = 60;
     // Object theo dõi hoạt động của bàn phím.
     private KeyPress keyBoard = new KeyPress();
-    // Có thể thay đổi cho từng vật thể
-    // Vị trí của vật thể trong game (Từng vật thể lại khác nhau)
-    int positionX = 100;
-    int positionY = 100;
-    int velocity = 4;
+
+    // Khai báo biến map
+    private int[][] map;
 
     // Gọi các đối tượng của class ra
     Paddle paddle = new Paddle(keyBoard, this);
+    List<NormalBrick> brickList = new ArrayList<>();
+    List<StrongBrick> strongBList = new ArrayList<>();
 
     private Thread gameRuning;
 
@@ -51,9 +60,12 @@ public class GameManager extends JPanel implements Runnable {
      * Constructor of GameManager.
      */
     public GameManager() {
+        // Load levels trong constructor mac dinh la level 0
+        loadLevels(3);
+        
         // Quản lý màn hình game
         // Truyền kích thước của cửa sổ game.
-        this.setPreferredSize(new Dimension(boardWidth, boardHeight));
+        this.setPreferredSize(new Dimension((int) boardWidth,(int) boardHeight));
         // Truyền màu cho background của cửa sổ
         this.setBackground(Color.BLACK);
         // Cho phép lưu trữ các buffer của các nhân vật trong game
@@ -63,6 +75,48 @@ public class GameManager extends JPanel implements Runnable {
         // cho panel nhận phím và đăng ký listener
         setFocusable(true);
         addKeyListener(keyBoard);
+    }
+
+    /**
+     * Method để load levels từ file JSON
+     */
+    private void loadLevels(int typeLevel) {
+        List<LevelLoader.Level> levels = LevelLoader.loadLevels(
+            "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
+
+        LevelLoader.Level level = levels.get(typeLevel);
+        map = level.map;
+
+        // In ra để kiểm tra
+        float gap = 10;
+        float Y_pos = 50;
+        System.out.println("Loaded map:");
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                System.out.print(map[i][j] + " ");
+            }
+            System.out.println();
+        }
+        for (int i = 0; i < map.length; i++) {
+            float brickFullWidth = (map[i].length) * 48 + (map[i].length - 1) * gap;
+            float X_pos = (boardWidth - brickFullWidth) / 2;
+            // System.out.println(boardWidth);
+            // System.out.println(X_pos);
+            // System.out.println(brickFullWidth);
+            for (int j = 0; j < map[i].length; j++) {
+                if (map[i][j] == 1) {
+                    NormalBrick normalBrick = new NormalBrick(X_pos,Y_pos, this);
+                    brickList.add(normalBrick);
+                }
+                else if (map[i][j] == 2) {
+                    StrongBrick strongBrick = new StrongBrick(X_pos, Y_pos, this);
+                    strongBList.add(strongBrick);
+                }
+                X_pos += brickWidth + gap;
+            }
+            Y_pos += brickHeight + gap;
+            System.out.println();
+        }
     }
 
     /**
@@ -103,6 +157,9 @@ public class GameManager extends JPanel implements Runnable {
      */
     public void update() {
         paddle.update();
+        for (NormalBrick brick : brickList) {
+            brick.update();
+        }
     }
 
     /**
@@ -114,6 +171,12 @@ public class GameManager extends JPanel implements Runnable {
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D)g;
+        for (NormalBrick brick : brickList) {
+            brick.render(g2);
+        }
+        for (StrongBrick brick : strongBList) {
+            brick.render(g2);
+        }
         paddle.render(g2);
         g2.dispose();
     }
@@ -122,10 +185,14 @@ public class GameManager extends JPanel implements Runnable {
      * Getter & Setter
      * @return
      */
-    public int getBoardWidth() {
+    public float getBoardWidth() {
         return boardWidth;
     }
-    public int getBoardHeight() {
+    public float getBoardHeight() {
         return boardHeight;
+    }
+    
+    public int[][] getMap() {
+        return map;
     }
 }
