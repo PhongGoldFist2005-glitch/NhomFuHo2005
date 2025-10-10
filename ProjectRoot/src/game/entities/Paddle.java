@@ -2,34 +2,47 @@ package game.entities;
 
 import game.core.GameManager;
 import game.core.KeyPress;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 
 // class cho thanh đỡ bóng kế thừa từ MovableObject.
 public class Paddle extends MovableObject {
-	// Tham số thể hiện nâng cấp cho thanh đỡ
-	protected int currentPowerUp;
+    // Tham số thể hiện nâng cấp cho thanh đỡ
+    protected int currentPowerUp;
 
-	KeyPress keyH;
-	GameManager gameManager;
+    KeyPress keyH;
+    GameManager gameManager;
 
-	// Các giá trị mặc định ban đầu
-    protected float defaultX = gameManager.getBoardWidth() / 2;
-    protected float defaultY = gameManager.getBoardHeight();
+    // Các giá trị mặc định ban đầu
+    protected float defaultX;
+    protected float defaultY;
     protected float defaultWidth = 80;
     protected float defaultHeight = 10;
     protected float defaultSpeed = 4;
     protected int defaultPowerUp = 1;
 
+    public float getDefaultWidth(){
+        return defaultWidth;
+    }
+
+    public float getDefaultHeight() {
+        return defaultHeight;
+    }
+
     public Paddle(KeyPress keyH, GameManager gameManager) {
-		this.keyH = keyH;
-		this.gameManager = gameManager;
+
         // Truyền giá trị mặc định ban đầu cho super
-		float startWidth = gameManager.getBoardWidth() / 2;
-		float startHeight = gameManager.getBoardHeight();
-		// Để hiện thị chiều cao của thanh trượt
-		// lấy chiều cao toàn màn hình - chiều cao của vật thể
-        super(startWidth, startHeight - 15, 80, 10, 4, 4);
+//        float startWidth = gameManager.getBoardWidth() / 2;
+//        float startHeight = gameManager.getBoardHeight();
+        // Để hiện thị chiều cao của thanh trượt
+        // lấy chiều cao toàn màn hình - chiều cao của vật thể
+        super(gameManager.boardWidth / 2, gameManager.boardHeight - 15, 80, 10, 10, 0);
+        this.keyH = keyH;
+        this.gameManager = gameManager;
+
+        this.defaultX = gameManager.getBoardWidth() / 2;
+        this.defaultY = gameManager.getBoardHeight() - 15;
         this.currentPowerUp = defaultPowerUp;
     }
 
@@ -44,50 +57,57 @@ public class Paddle extends MovableObject {
         this.currentPowerUp = defaultPowerUp;
     }
 
-	/**
-	 * Update.
-	 */
-	@Override
-	public void update() {
-		move();
-	}
+    /**
+     * Update.
+     */
+    @Override
+    public void update() {
+        move();
+    }
 
-	/**
-	 * Vẽ thanh đỡ lên màn hình.
-	 */
-	@Override
-	public void render(Graphics2D g2) {
-		g2.setColor(Color.decode("#CC00FF"));
-        g2.fillRect((int) this.x,(int) this.y,(int) this.width,(int) this.height);
-	}
+    /**
+     * Vẽ thanh đỡ lên màn hình.
+     */
+    @Override
+    public void render(Graphics2D g2) {
+        g2.setColor(Color.decode("#CC00FF"));
+        g2.fillRect((int) this.x, (int) this.y, (int) this.width, (int) this.height);
+    }
 
-	/**
-	 * Class chịu trách nhiệm cho quản lý di chuyển
-	 * của vật.
-	 */
-	@Override
-	public void move() {
-		if (moveLeft()) {
-            this.x -= dx;
+    /**
+     * Class chịu trách nhiệm cho quản lý di chuyển
+     * của vật.
+     */
+    @Override
+    public void move() {
+        if (moveLeft()) {
+            if(this.x > 0){// gioi han trai kha nang di chuyen cua paddle de khong vuot qua screen
+                this.x -= dx;
+            }
+
         }
 
         if (moveRight()) {
-            this.x += dx;
+            // Chi di chuyen khi canh paddle co toa do nho hon chieu rong man hinh
+            if(this.x +this.width < gameManager.getBoardWidth() ){
+                this.x += dx;
+            }
+
         }
-	}
-	
-	// Phương thức cho thanh di chuyển sang bên trái
-	public boolean moveLeft() {
-		return this.keyH.moveLeft == true;
-	}
+    }
 
-	// Phương thức cho thanh di chuyển sang bên phải
-	public boolean moveRight() {
-		return this.keyH.moveRight == true;
-	}
+    // Phương thức cho thanh di chuyển sang bên trái
+    public boolean moveLeft() {
+        return this.keyH.moveLeft == true;
+    }
 
-	// Phương thức nhằm nâng cấp thanh trượt
-	public void applyPowerUp() {
-		// pass
-	}
+    // Phương thức cho thanh di chuyển sang bên phải
+    public boolean moveRight() {
+        return this.keyH.moveRight == true;
+    }
+
+    // Phương thức nhằm nâng cấp thanh trượt
+    public void applyPowerUp() {
+        // pass
+    }
 }

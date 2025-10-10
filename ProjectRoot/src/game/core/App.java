@@ -11,7 +11,7 @@ public class App {
         JFrame frame = new JFrame("Brick Breaker");
         frame.setResizable(false);
         frame.setDefaultCloseOperation((JFrame.EXIT_ON_CLOSE));
-        
+
         // Thêm game manager vào để cấu hình phần frame
         GameManager gameManager = new GameManager();
         frame.add(gameManager);

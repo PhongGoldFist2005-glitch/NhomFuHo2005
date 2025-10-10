@@ -3,6 +3,7 @@ package game.core;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -41,7 +42,8 @@ public class LevelLoader {
         Gson gson = new Gson();
         try (FileReader reader = new FileReader(jsonFilePath)) {
             JsonObject jsonObject = gson.fromJson(reader, JsonObject.class);
-            Type levelListType = new TypeToken<List<Level>>() {}.getType();
+            Type levelListType = new TypeToken<List<Level>>() {
+            }.getType();
             return gson.fromJson(jsonObject.getAsJsonArray("levels"), levelListType);
         } catch (IOException e) {
             throw new RuntimeException("Không thể đọc file JSON: " + e.getMessage(), e);
