@@ -68,11 +68,19 @@ public class Paddle extends MovableObject {
 	@Override
 	public void move() {
 		if (moveLeft()) {
-            this.x -= dx;
+			if (this.x - dx < 0) {
+				this.x = 0;
+			} else {
+				this.x -= dx;
+			}
         }
 
         if (moveRight()) {
-            this.x += dx;
+			if (this.x + this.width + dx > gameManager.getBoardWidth()) {
+				this.x = gameManager.getBoardWidth() - this.width;
+			} else {
+				this.x += dx;
+			}
         }
 	}
 	
