@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "../../../.."
+		}
+	],
+	"settings": {
+		"java.project.sourcePaths": [
+			"ProjectRoot\\src"
+		],
+		"java.project.referencedLibraries": [
+			"c:\\Users\\admin\\Downloads\\gson-2.11.0.jar"
+		]
+	}
+}
