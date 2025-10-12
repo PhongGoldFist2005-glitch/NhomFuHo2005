@@ -1,6 +1,8 @@
 package game.core;
 
-import javax.swing.JPanel;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.*;
 
 import game.entities.*;
 
@@ -11,6 +13,8 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.awt.Image;
+import java.io.IOException;
 
 public class GameManager extends JPanel implements Runnable {
     // widthPix, heightPix (Dựa trên kích thước của gạch)
@@ -34,11 +38,16 @@ public class GameManager extends JPanel implements Runnable {
 
     // FPS của trò chơi: (Từng khung hình vẽ trên 1 giây)
     private final int FPS = 60;
+    private String backgroundURL = "C:\\Users\\Admin\\IdeaProjects\\Ankanoid\\NhomFuHo2005\\ProjectRoot\\src\\game\\uibackground_fire.png";
+    private Image background = new ImageIcon(backgroundURL).getImage();
     // Object theo dõi hoạt động của bàn phím.
     private KeyPress keyBoard = new KeyPress();
 
     // Khai báo biến map
     private int[][] map;
+    // Khai báo biến âm thanh
+    private static String musicUrl = "C:\\Users\\Admin\\IdeaProjects\\Ankanoid\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\gameplay.wav";
+    Music gameMusicPlay;
 
     // Gọi các đối tượng của class ra
     Paddle paddle = new Paddle(keyBoard, this);
@@ -57,15 +66,29 @@ public class GameManager extends JPanel implements Runnable {
     }
 
     /**
-     * Constructor of GameManager.
+     * Điều khiển âm thanh chơi game.
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     * @throws LineUnavailableException
      */
-    public GameManager() {
+    public void gameMusic() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        gameMusicPlay.play();
+    }
+
+    /**
+     * Constructor of GameManager.
+     * @throws LineUnavailableException
+     * @throws IOException
+     * @throws UnsupportedAudioFileException
+     */
+    public GameManager() throws UnsupportedAudioFileException, IOException, LineUnavailableException, UnsupportedAudioFileException, LineUnavailableException {
         // Load levels trong constructor mac dinh la level 0
         loadLevels(3);
-
+        // Load nhạc sẵn.
+        gameMusicPlay = new Music(musicUrl);
         // Quản lý màn hình game
         // Truyền kích thước của cửa sổ game.
-        this.setPreferredSize(new Dimension((int) boardWidth, (int) boardHeight));
+        this.setPreferredSize(new Dimension((int) boardWidth,(int) boardHeight));
         // Truyền màu cho background của cửa sổ
         this.setBackground(Color.BLACK);
         // Cho phép lưu trữ các buffer của các nhân vật trong game
@@ -104,9 +127,10 @@ public class GameManager extends JPanel implements Runnable {
             // System.out.println(brickFullWidth);
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] == 1) {
-                    NormalBrick normalBrick = new NormalBrick(X_pos, Y_pos, this);
+                    NormalBrick normalBrick = new NormalBrick(X_pos,Y_pos, this);
                     brickList.add(normalBrick);
-                } else if (map[i][j] == 2) {
+                }
+                else if (map[i][j] == 2) {
                     StrongBrick strongBrick = new StrongBrick(X_pos, Y_pos, this);
                     strongBList.add(strongBrick);
                 }
@@ -142,7 +166,7 @@ public class GameManager extends JPanel implements Runnable {
                 update();
                 // Repaint
                 repaint();
-                delta--;
+                delta --;
             }
         }
     }
@@ -197,6 +221,7 @@ public class GameManager extends JPanel implements Runnable {
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
+        g.drawImage(background, 0, 0,(int) this.getBoardWidth(),(int) this.getBoardHeight(), null);
         for (NormalBrick brick : brickList) {
             brick.render(g2);
         }
@@ -210,18 +235,22 @@ public class GameManager extends JPanel implements Runnable {
 
     /**
      * Getter & Setter
-     *
      * @return
      */
     public float getBoardWidth() {
         return boardWidth;
     }
-
     public float getBoardHeight() {
         return boardHeight;
     }
-
+    
     public int[][] getMap() {
         return map;
     }
+
+    public Music getGameMusic() {
+        return this.gameMusicPlay;
+    }
 }
+
+// Ăn power up load background mới.

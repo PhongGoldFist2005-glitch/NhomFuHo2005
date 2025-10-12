@@ -74,25 +74,26 @@ public class Paddle extends MovableObject {
         g2.fillRect((int) this.x, (int) this.y, (int) this.width, (int) this.height);
     }
 
-    /**
-     * Class chịu trách nhiệm cho quản lý di chuyển
-     * của vật.
-     */
-    @Override
-    public void move() {
+	/**
+	 * Class chịu trách nhiệm cho quản lý di chuyển
+	 * của vật.
+	 */
+	@Override
+	public void move() {
         if (moveLeft()) {
-            if(this.x > 0){// gioi han trai kha nang di chuyen cua paddle de khong vuot qua screen
+            if (this.x - dx < 0) {
+                this.x = 0;
+            } else {
                 this.x -= dx;
             }
-
         }
 
         if (moveRight()) {
-            // Chi di chuyen khi canh paddle co toa do nho hon chieu rong man hinh
-            if(this.x +this.width < gameManager.getBoardWidth() ){
-                this.x += dx;
-            }
-
+			if (this.x + this.width + dx > gameManager.getBoardWidth()) {
+				this.x = gameManager.getBoardWidth() - this.width;
+			} else {
+				this.x += dx;
+			}
         }
     }
 
