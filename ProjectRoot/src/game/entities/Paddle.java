@@ -17,18 +17,10 @@ public class Paddle extends MovableObject {
     // Các giá trị mặc định ban đầu
     protected float defaultX;
     protected float defaultY;
-    protected float defaultWidth = 80;
-    protected float defaultHeight = 10;
-    protected float defaultSpeed = 4;
+    protected static final float defaultWidth = 80;
+    protected static final float defaultHeight = 10;
+    protected static final float defaultSpeed = 4;
     protected int defaultPowerUp = 1;
-
-    public float getDefaultWidth(){
-        return defaultWidth;
-    }
-
-    public float getDefaultHeight() {
-        return defaultHeight;
-    }
 
     public Paddle(KeyPress keyH, GameManager gameManager) {
 
@@ -37,10 +29,9 @@ public class Paddle extends MovableObject {
 //        float startHeight = gameManager.getBoardHeight();
         // Để hiện thị chiều cao của thanh trượt
         // lấy chiều cao toàn màn hình - chiều cao của vật thể
-        super(gameManager.boardWidth / 2, gameManager.boardHeight - 15, 80, 10, 10, 0);
+        super((gameManager.boardWidth - defaultWidth) / 2, gameManager.boardHeight - defaultHeight - 5, 80, 10, 10, 0);
         this.keyH = keyH;
         this.gameManager = gameManager;
-
         this.defaultX = gameManager.getBoardWidth() / 2;
         this.defaultY = gameManager.getBoardHeight() - 15;
         this.currentPowerUp = defaultPowerUp;
@@ -110,5 +101,23 @@ public class Paddle extends MovableObject {
     // Phương thức nhằm nâng cấp thanh trượt
     public void applyPowerUp() {
         // pass
+    }
+
+    // Lay vi tri cua x
+    public float getX() {
+        return this.x;
+    }
+
+    // Lay vi tri cua y
+    public float getY() {
+        return this.y;
+    }
+
+    public float getDefaultWidth(){
+        return defaultWidth;
+    }
+
+    public float getDefaultHeight() {
+        return defaultHeight;
     }
 }

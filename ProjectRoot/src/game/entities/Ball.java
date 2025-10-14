@@ -15,18 +15,19 @@ public class Ball extends MovableObject {
     protected boolean isLaunch;
     protected float defaultX;
     protected float defaultY;
-    protected float defaultRadius;
-    protected float defaultSpeed;
-    protected int defaultPowerUp;
+    protected static final float defaultRadius = 20;
+    protected static final float defaultSpeed = 4;
+    protected static final int defaultPowerUp = 1;
+    protected Paddle paddle;
 
-    public Ball(KeyPress keyH, GameManager gameManager) {
-        super(gameManager.getBoardWidth() / 2, gameManager.getBoardHeight() - 30, 20, 20, 4, 4);
+    public Ball(KeyPress keyH, Paddle paddle, GameManager gameManager) {
+        // - 20 la default radius
+        super((gameManager.getBoardWidth() - defaultRadius) / 2, gameManager.getBoardHeight() - 30, 20, 20, 4, 4);
         this.keyH = keyH;
-        this.gameManager = gameManager;
+        this.paddle = paddle;
         this.defaultX = gameManager.getBoardWidth() / 2;
-        this.defaultY = gameManager.getBoardHeight() - 30;
-        this.defaultRadius = 20;
-        this.defaultSpeed = 4;
+        this.defaultY = gameManager.getBoardHeight() - 15;
+        this.gameManager = gameManager;
         this.currentPowerUp = 1;
         this.isLaunch = false;
     }
@@ -107,8 +108,15 @@ public class Ball extends MovableObject {
             if (this.y <= 0) {// giu cho bong khong di ra ngoai pham vi ben tren cua so
                 dy = -dy;
             }
-            this.x += dx;
+            if (this.y >= gameManager.getBoardHeight()) {
+                this.x = paddle.getX() + (paddle.getDefaultWidth() - defaultRadius) / 2;
+                this.y = paddle.getY() - paddle.getDefaultHeight();
+                isLaunch = false;
+                gameManager.lostSoul();
+                return;
+            }
             this.y += dy;
+            this.x += dx;
         }
 
     }

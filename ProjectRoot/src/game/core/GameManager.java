@@ -38,20 +38,29 @@ public class GameManager extends JPanel implements Runnable {
 
     // FPS của trò chơi: (Từng khung hình vẽ trên 1 giây)
     private final int FPS = 60;
-    private String backgroundURL = "C:\\Users\\Admin\\IdeaProjects\\Ankanoid\\NhomFuHo2005\\ProjectRoot\\src\\game\\uibackground_fire.png";
+    
+    private String backgroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\background_earth.jpg";
     private Image background = new ImageIcon(backgroundURL).getImage();
+    
     // Object theo dõi hoạt động của bàn phím.
     private KeyPress keyBoard = new KeyPress();
+
+    // Mạng tối đa của người chơi.
+    private int soul = 3;
+    String thHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\3hearts.png";
+    String twHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\2hearts.png";
+    String onHeartUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\1heart.png";
+    Image heartImage;
 
     // Khai báo biến map
     private int[][] map;
     // Khai báo biến âm thanh
-    private static String musicUrl = "C:\\Users\\Admin\\IdeaProjects\\Ankanoid\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\gameplay.wav";
+    private static String musicUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\gameplay.wav";
     Music gameMusicPlay;
 
     // Gọi các đối tượng của class ra
     Paddle paddle = new Paddle(keyBoard, this);
-    Ball ball = new Ball(keyBoard, this);
+    Ball ball = new Ball(keyBoard, paddle, this);
     List<NormalBrick> brickList = new ArrayList<>();
     List<StrongBrick> strongBList = new ArrayList<>();
 
@@ -83,7 +92,7 @@ public class GameManager extends JPanel implements Runnable {
      */
     public GameManager() throws UnsupportedAudioFileException, IOException, LineUnavailableException, UnsupportedAudioFileException, LineUnavailableException {
         // Load levels trong constructor mac dinh la level 0
-        loadLevels(3);
+        loadLevels(1);
         // Load nhạc sẵn.
         gameMusicPlay = new Music(musicUrl);
         // Quản lý màn hình game
@@ -104,7 +113,7 @@ public class GameManager extends JPanel implements Runnable {
      * Method để load levels từ file JSON
      */
     private void loadLevels(int typeLevel) {
-        List<LevelLoader.Level> levels = LevelLoader.loadLevels("C:\\Users\\Admin\\IdeaProjects\\Ankanoid\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
+        List<LevelLoader.Level> levels = LevelLoader.loadLevels("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
 
         LevelLoader.Level level = levels.get(typeLevel);
         map = level.map;
@@ -178,6 +187,10 @@ public class GameManager extends JPanel implements Runnable {
      * các hàm này.
      */
     public void update() {
+        if (this.soul == 0) {
+            System.out.println("You lose!");
+            // Game Over Screen.
+        }
         paddle.update();
         ball.checkCollision(paddle);
 
@@ -219,9 +232,20 @@ public class GameManager extends JPanel implements Runnable {
      */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        if (this.soul == 3) {
+            this.heartImage = new ImageIcon(thHeartsUrl).getImage();
+        } else if (this.soul == 2) {
+            this.heartImage = new ImageIcon(twHeartsUrl).getImage();
+        } else if (this.soul == 1){
+            this.heartImage = new ImageIcon(onHeartUrl).getImage();
+        }
+
+        g.drawImage(background, 0, 0,(int) this.getBoardWidth(),(int) this.getBoardHeight(), null);
+        
+        g.drawImage(heartImage, (int) getBoardWidth() - 120, 20, 100, 30, null);
 
         Graphics2D g2 = (Graphics2D) g;
-        g.drawImage(background, 0, 0,(int) this.getBoardWidth(),(int) this.getBoardHeight(), null);
+        
         for (NormalBrick brick : brickList) {
             brick.render(g2);
         }
@@ -250,6 +274,14 @@ public class GameManager extends JPanel implements Runnable {
 
     public Music getGameMusic() {
         return this.gameMusicPlay;
+    }
+
+    public int getSoul() {
+        return this.soul;
+    }
+
+    public void lostSoul() {
+        this.soul -= 1;
     }
 }
 
