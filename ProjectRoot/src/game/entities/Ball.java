@@ -22,12 +22,12 @@ public class Ball extends MovableObject {
 
     public Ball(KeyPress keyH, Paddle paddle, GameManager gameManager) {
         // - 20 la default radius
-        super((gameManager.getBoardWidth() - defaultRadius) / 2, gameManager.getBoardHeight() - 30, 20, 20, 4, 4);
+        super((gameManager.getBoardWidth() - defaultRadius) / 2, gameManager.getBoardHeight() - 30, defaultRadius, defaultRadius, defaultSpeed, defaultSpeed);
         this.keyH = keyH;
         this.paddle = paddle;
-        this.defaultX = gameManager.getBoardWidth() / 2;
-        this.defaultY = gameManager.getBoardHeight() - 15;
         this.gameManager = gameManager;
+        this.defaultX = (this.gameManager.getBoardWidth() - defaultRadius) / 2;
+        this.defaultY = this.gameManager.getBoardHeight() - 30;
         this.currentPowerUp = 1;
         this.isLaunch = false;
     }
