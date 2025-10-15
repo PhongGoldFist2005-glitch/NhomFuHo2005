@@ -51,6 +51,8 @@ public class GameManager extends JPanel implements Runnable {
     String twHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\2hearts.png";
     String onHeartUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\1heart.png";
     Image heartImage;
+    // Level hiện tại của người chơi.
+    private int myLevel = 1;
 
     // Khai báo biến map
     private int[][] map;
@@ -114,7 +116,14 @@ public class GameManager extends JPanel implements Runnable {
      */
     private void loadLevels(int typeLevel) {
         List<LevelLoader.Level> levels = LevelLoader.loadLevels("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
+        
+        if (!brickList.isEmpty()) {
+            brickList.clear();
+        }
 
+        if (!strongBList.isEmpty()) {
+            strongBList.clear();
+        }
         LevelLoader.Level level = levels.get(typeLevel);
         map = level.map;
 
@@ -131,9 +140,6 @@ public class GameManager extends JPanel implements Runnable {
         for (int i = 0; i < map.length; i++) {
             float brickFullWidth = (map[i].length) * 48 + (map[i].length - 1) * gap;
             float X_pos = (boardWidth - brickFullWidth) / 2;
-            // System.out.println(boardWidth);
-            // System.out.println(X_pos);
-            // System.out.println(brickFullWidth);
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] == 1) {
                     NormalBrick normalBrick = new NormalBrick(X_pos,Y_pos, this);
@@ -188,8 +194,13 @@ public class GameManager extends JPanel implements Runnable {
      */
     public void update() {
         if (this.soul == 0) {
-            System.out.println("You lose!");
-            // Game Over Screen.
+            try {
+                EndGame endGame = new EndGame(this);
+                gameRuning = null;
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         paddle.update();
         ball.checkCollision(paddle);
@@ -213,15 +224,6 @@ public class GameManager extends JPanel implements Runnable {
             strongBrick.update();
             ball.checkCollision(strongBrick);
         }
-
-//        for (NormalBrick brick : brickList) {
-//            brick.update();
-//            ball.checkCollision(brick);
-//        }
-//        for(StrongBrick strongBrick : strongBList){
-//            strongBrick.update();
-//            ball.checkCollision(strongBrick);
-//        }
         ball.update();
     }
 
@@ -257,6 +259,30 @@ public class GameManager extends JPanel implements Runnable {
         g2.dispose();
     }
 
+    public void restartGame(int currentLevel) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        
+        /**
+         * Hồi phục mạng gốc.
+         */
+        this.soul = 3;
+        
+        /**
+         * Điều chỉnh âm thanh về mặc định.
+         */
+        gameMusicPlay.stop();
+        gameMusicPlay = new Music(musicUrl);
+        gameMusicPlay.toggle();
+
+        /**
+         * Load lại map, paddle, gạch game đang thua.
+         */
+        loadLevels(currentLevel);
+        paddle.resetToDefault();
+        ball.setDefaultBallValue();
+
+        gameThread();
+    }
+
     /**
      * Getter & Setter
      * @return
@@ -282,6 +308,14 @@ public class GameManager extends JPanel implements Runnable {
 
     public void lostSoul() {
         this.soul -= 1;
+    }
+
+    public int getLevel() {
+        return this.myLevel;
+    }
+
+    public void setLevel(int level) {
+        this.myLevel = level;
     }
 }
 
