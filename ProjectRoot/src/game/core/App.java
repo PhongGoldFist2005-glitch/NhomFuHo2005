@@ -24,13 +24,13 @@ public class App {
         GameManager gameManager = new GameManager();
         float gameWidth = gameManager.getBoardWidth();
         float gameHeight = gameManager.getBoardHeight();
-        
+
         menuFrame.setSize(new Dimension((int) gameWidth, (int) gameHeight));
         menuFrame.setLocationRelativeTo(null);
 
         // Xây dựng background cho jframe.
         JPanel menuPanel = new JPanel() {
-            String imageUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\ui\\MainScreen.jpeg";
+            String imageUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MainScreen.jpeg";
             private Image background = new ImageIcon(imageUrl).getImage();
 
             @Override
@@ -51,7 +51,7 @@ public class App {
         JButton startButton = new JButton("Start Game");
         startButton.setBounds((int) (gameWidth / 2) - 100,(int) (gameHeight / 2) - 100, 200, 55);
         startButton.setFocusable(false);
-        ImageIcon startIcon = new ImageIcon("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\ui\\play.png");
+        ImageIcon startIcon = new ImageIcon("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\play.png");
         startButton.setText("");
         startButton.setIcon(startIcon);
         startButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -63,7 +63,7 @@ public class App {
         JButton musicButton = new JButton("Turn On Music");
         musicButton.setBounds((int) (gameWidth / 2) - 100,(int) (gameHeight / 2), 200, 55);
         musicButton.setFocusable(false);
-        ImageIcon musicIcon = new ImageIcon("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\ui\\audio.png");
+        ImageIcon musicIcon = new ImageIcon("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\audio.png");
         musicButton.setText("");
         musicButton.setIcon(musicIcon);
         musicButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -75,7 +75,7 @@ public class App {
         JButton exitButton = new JButton("Exit");
         exitButton.setBounds((int) (gameWidth / 2) - 100,(int) (gameHeight / 2) + 100, 200, 55);
         exitButton.setFocusable(false);
-        ImageIcon exitIcon = new ImageIcon("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\ui\\exit.png");
+        ImageIcon exitIcon = new ImageIcon("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\exit.png");
         exitButton.setText("");
         exitButton.setIcon(exitIcon);
         exitButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -111,7 +111,7 @@ public class App {
         JFrame frame = new JFrame("Brick Breaker");
         frame.setResizable(false);
         frame.setDefaultCloseOperation((JFrame.EXIT_ON_CLOSE));
-        
+
         // Thêm game manager vào để cấu hình phần frame
         frame.add(gameManager);
         frame.pack();

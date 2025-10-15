@@ -1,5 +1,7 @@
 package game.entities;
 
+import java.awt.*;
+
 // Vât phẩm nâng cấp sức mạnh rơi ra khi phá gạch cho quả bóng hoặc ván.
 public class PowerUp extends GameObject {
     protected int type;
@@ -27,12 +29,12 @@ public class PowerUp extends GameObject {
     }
 
     @Override
-    public void render() {
-        // pass
+    public void render(Graphics2D g2) {
+
     }
 
-    @Override
-    public void move() {
-        // pass
-    }
+//    @Override
+//    public void move() {
+//        // pass
+//    }
 }

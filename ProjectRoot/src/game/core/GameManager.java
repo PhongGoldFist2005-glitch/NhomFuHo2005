@@ -2,21 +2,19 @@ package game.core;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import game.entities.NormalBrick;
-import game.entities.Paddle;
-import game.entities.StrongBrick;
+import game.entities.*;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.awt.Image;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameManager extends JPanel implements Runnable {
     // widthPix, heightPix (Dựa trên kích thước của gạch)
@@ -27,7 +25,7 @@ public class GameManager extends JPanel implements Runnable {
     private final int scale = 3;
     // rowCount, colCount là số hàng và số cột tối đa của màn hình game.
     // Yêu cầu đủ kích thước để bỏ hết đống gạch vào trong màn hình.
-    private final int rowCount =  20;
+    private final int rowCount = 20;
     private final int colCount = 18;
     // Chiều rộng chiều cao thực tế của gạch
     int brickWidth = widthPix * scale;
@@ -35,15 +33,24 @@ public class GameManager extends JPanel implements Runnable {
     // Kích thước của toàn màn hình
     // Scale
     private int offset = 250;
-    private float boardWidth = widthPix * scale * rowCount + 2 * offset;
-    private float boardHeight = heightPix * scale * colCount + offset / 2;
+    public float boardWidth = widthPix * scale * rowCount + 2 * offset;
+    public float boardHeight = heightPix * scale * colCount + offset / 2;
 
     // FPS của trò chơi: (Từng khung hình vẽ trên 1 giây)
     private final int FPS = 60;
-    private String backgroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\ui\\background_fire.png";
+    
+    private String backgroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\background_earth.jpg";
     private Image background = new ImageIcon(backgroundURL).getImage();
+    
     // Object theo dõi hoạt động của bàn phím.
     private KeyPress keyBoard = new KeyPress();
+
+    // Mạng tối đa của người chơi.
+    private int soul = 3;
+    String thHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\3hearts.png";
+    String twHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\2hearts.png";
+    String onHeartUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\1heart.png";
+    Image heartImage;
 
     // Khai báo biến map
     private int[][] map;
@@ -53,6 +60,7 @@ public class GameManager extends JPanel implements Runnable {
 
     // Gọi các đối tượng của class ra
     Paddle paddle = new Paddle(keyBoard, this);
+    Ball ball = new Ball(keyBoard, paddle, this);
     List<NormalBrick> brickList = new ArrayList<>();
     List<StrongBrick> strongBList = new ArrayList<>();
 
@@ -78,13 +86,13 @@ public class GameManager extends JPanel implements Runnable {
 
     /**
      * Constructor of GameManager.
-     * @throws LineUnavailableException 
-     * @throws IOException 
-     * @throws UnsupportedAudioFileException 
+     * @throws LineUnavailableException
+     * @throws IOException
+     * @throws UnsupportedAudioFileException
      */
-    public GameManager() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+    public GameManager() throws UnsupportedAudioFileException, IOException, LineUnavailableException, UnsupportedAudioFileException, LineUnavailableException {
         // Load levels trong constructor mac dinh la level 0
-        loadLevels(3);
+        loadLevels(1);
         // Load nhạc sẵn.
         gameMusicPlay = new Music(musicUrl);
         // Quản lý màn hình game
@@ -105,8 +113,7 @@ public class GameManager extends JPanel implements Runnable {
      * Method để load levels từ file JSON
      */
     private void loadLevels(int typeLevel) {
-        List<LevelLoader.Level> levels = LevelLoader.loadLevels(
-            "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
+        List<LevelLoader.Level> levels = LevelLoader.loadLevels("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
 
         LevelLoader.Level level = levels.get(typeLevel);
         map = level.map;
@@ -180,10 +187,42 @@ public class GameManager extends JPanel implements Runnable {
      * các hàm này.
      */
     public void update() {
-        paddle.update();
-        for (NormalBrick brick : brickList) {
-            brick.update();
+        if (this.soul == 0) {
+            System.out.println("You lose!");
+            // Game Over Screen.
         }
+        paddle.update();
+        ball.checkCollision(paddle);
+
+        Iterator<NormalBrick> normalBrickIterator = brickList.iterator();
+        while (normalBrickIterator.hasNext()) {
+            Brick brick = normalBrickIterator.next();
+            if (brick.isDestroyed()) {
+                normalBrickIterator.remove();
+            }
+            brick.update();
+            ball.checkCollision(brick);
+        }
+
+        Iterator<StrongBrick> strongBrickIterator = strongBList.iterator();
+        while (strongBrickIterator.hasNext()) {
+            StrongBrick strongBrick = strongBrickIterator.next();
+            if (strongBrick.isDestroyed()) {
+                strongBrickIterator.remove();
+            }
+            strongBrick.update();
+            ball.checkCollision(strongBrick);
+        }
+
+//        for (NormalBrick brick : brickList) {
+//            brick.update();
+//            ball.checkCollision(brick);
+//        }
+//        for(StrongBrick strongBrick : strongBList){
+//            strongBrick.update();
+//            ball.checkCollision(strongBrick);
+//        }
+        ball.update();
     }
 
     /**
@@ -193,9 +232,20 @@ public class GameManager extends JPanel implements Runnable {
      */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        if (this.soul == 3) {
+            this.heartImage = new ImageIcon(thHeartsUrl).getImage();
+        } else if (this.soul == 2) {
+            this.heartImage = new ImageIcon(twHeartsUrl).getImage();
+        } else if (this.soul == 1){
+            this.heartImage = new ImageIcon(onHeartUrl).getImage();
+        }
 
         g.drawImage(background, 0, 0,(int) this.getBoardWidth(),(int) this.getBoardHeight(), null);
-        Graphics2D g2 = (Graphics2D)g;
+        
+        g.drawImage(heartImage, (int) getBoardWidth() - 120, 20, 100, 30, null);
+
+        Graphics2D g2 = (Graphics2D) g;
+        
         for (NormalBrick brick : brickList) {
             brick.render(g2);
         }
@@ -203,6 +253,7 @@ public class GameManager extends JPanel implements Runnable {
             brick.render(g2);
         }
         paddle.render(g2);
+        ball.render(g2);
         g2.dispose();
     }
 
@@ -223,6 +274,14 @@ public class GameManager extends JPanel implements Runnable {
 
     public Music getGameMusic() {
         return this.gameMusicPlay;
+    }
+
+    public int getSoul() {
+        return this.soul;
+    }
+
+    public void lostSoul() {
+        this.soul -= 1;
     }
 }
 

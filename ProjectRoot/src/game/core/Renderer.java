@@ -6,5 +6,5 @@ public class Renderer extends JPanel {
     public Renderer() {
         // Pass
     }
-    
+
 }

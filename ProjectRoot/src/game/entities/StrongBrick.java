@@ -30,17 +30,17 @@ public class StrongBrick extends Brick {
     }
 
     @Override
-	public void update() {
-		// TODO: Cập nhật trạng thái của gạch
+    public void update() {
+        // TODO: Cập nhật trạng thái của gạch
         this.check = this.isDestroyed();
     }
 
-	@Override
-	public void render(Graphics2D g2) {
-		// TODO: Vẽ gạch lên màn hình
+    @Override
+    public void render(Graphics2D g2) {
+        // TODO: Vẽ gạch lên màn hình
         if (this.check == false) {
             g2.setColor(Color.decode("#33CCFF"));
             g2.fillRect((int) this.x,(int) this.y,(int) this.width,(int) this.height);
         }
-	}
+    }
 }

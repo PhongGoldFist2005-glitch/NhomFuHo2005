@@ -1,6 +1,6 @@
 package game.entities;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 
 // Lớp trừu tượng chung cho mọi đối tượng trong game.
 abstract class GameObject {
@@ -17,10 +17,13 @@ abstract class GameObject {
         this.height = height;
     }
 
+    public Rectangle getBounds() {
+        return new Rectangle((int) x, (int) y, (int) width, (int) height);
+    }
+
     // Method dùng để update các thông tin trong gameplay
     public abstract void update();
 
     // Method dùng để hiện thị gameplay.
     public abstract void render(Graphics2D g2);
 }
-

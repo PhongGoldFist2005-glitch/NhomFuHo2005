@@ -12,6 +12,7 @@ public class KeyPress implements KeyListener {
     public boolean moveDown;
     public boolean moveLeft;
     public boolean moveRight;
+    public boolean launch;
 
     /**
      * Hành động khi nhấc keypass ra.
@@ -45,6 +46,9 @@ public class KeyPress implements KeyListener {
         if (keyCode == KeyEvent.VK_D) {
             moveRight = true;
         }
+        if (keyCode == KeyEvent.VK_SPACE) {
+            launch = true;
+        }
     }
 
     /**
@@ -69,6 +73,9 @@ public class KeyPress implements KeyListener {
 
         if (keyCode == KeyEvent.VK_D) {
             moveRight = false;
+        }
+        if (keyCode == KeyEvent.VK_SPACE) {
+            launch = false;
         }
     }
 }
