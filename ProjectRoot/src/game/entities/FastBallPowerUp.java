@@ -1,7 +1,59 @@
 package game.entities;
 
-//public class FastBallPowerUp extends PowerUp {
-//    public FastBallPowerUp(){
-//
-//    }
-//}
+import java.awt.Color;
+import java.awt.Graphics2D;
+
+import game.core.GameManager;
+
+public class FastBallPowerUp extends PowerUp {
+    protected static final int type = 4;
+    protected static final float width = 20;
+    protected static final float height = 20;
+    protected Ball ball;
+    protected float newSpeed;
+    GameManager gameManager;
+    public String newBackGroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\background_water.png";
+
+    public FastBallPowerUp(float x, float y, Paddle paddle, Ball ball, GameManager gameManager){
+        super(x, y, width, height, type, paddle);
+        this.ball = ball;
+        this.gameManager = gameManager;
+        this.newSpeed = ball.getDx() + 0;
+    }
+
+    public void upgradeBall() {
+        if (havePower) {
+            float speed = ball.getDefaultSpeed() * 2f; // ví dụ tăng 50%
+            ball.setDx(Math.signum(ball.getDx()) * speed);
+            ball.setDy(Math.signum(ball.getDy()) * speed);
+            gameManager.setBackGround(newBackGroundURL);
+        } else {
+            ball.setDx(Math.signum(ball.getDx()) * ball.getDefaultSpeed());
+            ball.setDy(Math.signum(ball.getDy()) * ball.getDefaultSpeed());
+            gameManager.setBackGround(gameManager.getDefaultBackGround());
+        }
+    }
+
+    public float getX() {
+        return this.x;
+    }
+
+    public float getY() {
+        return this.y;
+    }
+
+    @Override
+    public void update() {
+        Falling();
+        applyEffect(this.paddle);
+        removeEffect();
+        upgradeBall();
+    };
+
+    @Override
+    public void render(Graphics2D g2) {
+        g2.setColor(Color.BLUE);
+        g2.fillOval((int) x, (int) y, (int) width,(int) height);
+    };
+
+}
