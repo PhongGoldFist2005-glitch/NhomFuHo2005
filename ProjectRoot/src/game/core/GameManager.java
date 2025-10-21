@@ -308,6 +308,7 @@ public class GameManager extends JPanel implements Runnable {
                 });
             }
         }
+
         updatePlayGameMusic();
     }
 

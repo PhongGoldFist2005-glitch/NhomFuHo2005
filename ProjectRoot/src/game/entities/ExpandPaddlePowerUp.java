@@ -15,7 +15,7 @@ public class ExpandPaddlePowerUp extends PowerUp {
     public String newBackGroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\background_fire.png";
     GameManager gameManager;
 
-    public ExpandPaddlePowerUp(float x, float y,Paddle paddle, GameManager gameManager) {
+    public ExpandPaddlePowerUp(float x, float y, Paddle paddle, GameManager gameManager) {
         super(x, y, width, height, type, paddle);
         this.upgradeWidth = paddle.getWidth() + 100;
         this.gameManager = gameManager;
