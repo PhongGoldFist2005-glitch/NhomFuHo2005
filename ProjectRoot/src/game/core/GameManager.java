@@ -39,7 +39,7 @@ public class GameManager extends JPanel implements Runnable {
     // FPS của trò chơi: (Từng khung hình vẽ trên 1 giây)
     private final int FPS = 60;
     
-    private String backgroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\background_earth.jpg";
+    private String backgroundURL = "C:\\Users\\Admin\\IdeaProjects\\Ankanoid\\ProjectRoot\\src\\assets\\images\\background_earth.jpg";
     private Image background = new ImageIcon(backgroundURL).getImage();
     
     // Object theo dõi hoạt động của bàn phím.
@@ -47,9 +47,9 @@ public class GameManager extends JPanel implements Runnable {
 
     // Mạng tối đa của người chơi.
     private int soul = 3;
-    String thHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\3hearts.png";
-    String twHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\2hearts.png";
-    String onHeartUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\1heart.png";
+    String thHeartsUrl = "C:\\Users\\Admin\\IdeaProjects\\Ankanoid\\ProjectRoot\\src\\assets\\images\\3hearts.png";
+    String twHeartsUrl = "C:\\Users\\Admin\\IdeaProjects\\Ankanoid\\ProjectRoot\\src\\assets\\images\\2hearts.png";
+    String onHeartUrl = "C:\\Users\\Admin\\IdeaProjects\\Ankanoid\\ProjectRoot\\src\\assets\\images\\1heart.png";
     Image heartImage;
     // Level hiện tại của người chơi.
     private int myLevel = 1;
@@ -57,7 +57,7 @@ public class GameManager extends JPanel implements Runnable {
     // Khai báo biến map
     private int[][] map;
     // Khai báo biến âm thanh
-    private static String musicUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\gameplay.wav";
+    private static String musicUrl = "C:\\Users\\Admin\\IdeaProjects\\Ankanoid\\ProjectRoot\\src\\assets\\sounds\\gameplay.wav";
     Music gameMusicPlay;
 
     // Gọi các đối tượng của class ra
@@ -86,6 +86,7 @@ public class GameManager extends JPanel implements Runnable {
         gameMusicPlay.play();
     }
 
+    private JButton musicButton;
     /**
      * Constructor of GameManager.
      * @throws LineUnavailableException
@@ -97,6 +98,7 @@ public class GameManager extends JPanel implements Runnable {
         loadLevels(1);
         // Load nhạc sẵn.
         gameMusicPlay = new Music(musicUrl);
+
         // Quản lý màn hình game
         // Truyền kích thước của cửa sổ game.
         this.setPreferredSize(new Dimension((int) boardWidth,(int) boardHeight));
@@ -105,17 +107,30 @@ public class GameManager extends JPanel implements Runnable {
         // Cho phép lưu trữ các buffer của các nhân vật trong game
         this.setDoubleBuffered(true);
 
+        this.setLayout(null);
+
         // Quản lý bàn phím
         // cho panel nhận phím và đăng ký listener
         setFocusable(true);
         addKeyListener(keyBoard);
+
+        // them nut bat tat am thanh khi dang choi
+        musicButton = new JButton();
+        musicButton.setBounds(10,10,50,50);
+        musicButton.setFocusable(false);
+        updatePlayGameMusic();
+        musicButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        musicButton.setVerticalTextPosition(SwingConstants.CENTER);
+        musicButton.addActionListener(e -> gameMusicPlay.toggle());
+        this.add(musicButton);
+        this.setVisible(true);
     }
 
     /**
      * Method để load levels từ file JSON
      */
     private void loadLevels(int typeLevel) {
-        List<LevelLoader.Level> levels = LevelLoader.loadLevels("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
+        List<LevelLoader.Level> levels = LevelLoader.loadLevels("C:\\Users\\Admin\\IdeaProjects\\Ankanoid\\ProjectRoot\\src\\game\\levels\\level.json");
         
         if (!brickList.isEmpty()) {
             brickList.clear();
@@ -185,6 +200,13 @@ public class GameManager extends JPanel implements Runnable {
             }
         }
     }
+    String urlSpeakerImage;
+    public void updatePlayGameMusic(){
+        urlSpeakerImage = (gameMusicPlay.isPlaying())
+                ? "C:\\Users\\Admin\\IdeaProjects\\Ankanoid\\ProjectRoot\\src\\assets\\images\\MusicOn.jpg"
+                : "C:\\Users\\Admin\\IdeaProjects\\Ankanoid\\ProjectRoot\\src\\assets\\images\\MusicOff.jpg";
+        musicButton.setIcon(new ImageIcon(urlSpeakerImage));
+    }
 
     /**
      * Theo dõi sự thay đổi của người dùng.
@@ -225,7 +247,11 @@ public class GameManager extends JPanel implements Runnable {
             ball.checkCollision(strongBrick);
         }
         ball.update();
+        updatePlayGameMusic();
     }
+
+
+
 
     /**
      * Vẽ vật thể lên màn hình.
@@ -246,6 +272,7 @@ public class GameManager extends JPanel implements Runnable {
         
         g.drawImage(heartImage, (int) getBoardWidth() - 120, 20, 100, 30, null);
 
+        g.drawImage(new ImageIcon(urlSpeakerImage).getImage(), 10,10,50,50,null);
         Graphics2D g2 = (Graphics2D) g;
         
         for (NormalBrick brick : brickList) {

@@ -4,6 +4,7 @@ import game.core.GameManager;
 import game.core.KeyPress;
 
 import java.awt.*;
+import java.util.Random;
 
 // Xây dựng lớp ball.
 public class Ball extends MovableObject {
@@ -94,23 +95,27 @@ public class Ball extends MovableObject {
                 startLaunch();
             } else {
                 // bong dinh vo paddle
-                if (keyH.moveLeft && this.x > 0) {
-                    this.x -= 10;
-                }
-                if (keyH.moveRight && this.x + this.width < gameManager.getBoardWidth()) {
-                    this.x += 10;
-                }
+                this.x = paddle.getX() + (paddle.width) / 2 - (this.width) / 2;
+                this.y = paddle.getY() - this.height;
             }
         } else {
             if (this.x <= 0 || this.x + this.width >= gameManager.getBoardWidth()) {// giu cho bong khong di ra ngoai pham vi ben phai va ben trai cua so
+                if(this.x <= 0){
+                    this.x = 0;
+                }
+                else {
+                    this.x = gameManager.getBoardWidth() - this.width;
+                }
                 dx = -dx;
             }
             if (this.y <= 0) {// giu cho bong khong di ra ngoai pham vi ben tren cua so
+                this.y = 0;
                 dy = -dy;
             }
             if (this.y >= gameManager.getBoardHeight()) {
-                this.x = paddle.getX() + (paddle.getDefaultWidth() - defaultRadius) / 2;
-                this.y = paddle.getY() - paddle.getDefaultHeight();
+                // Khi mất mạng, reset lại quả bóng giưax paddle
+                this.x = paddle.getX() + (paddle.width) / 2 - (this.width) / 2;
+                this.y = paddle.getY() - this.height;
                 isLaunch = false;
                 gameManager.lostSoul();
                 return;
@@ -123,9 +128,15 @@ public class Ball extends MovableObject {
 
     public void startLaunch() {
         isLaunch = true;
-        //Bay len sang trai
-        dx = -defaultSpeed;
+        //Bay len sang trai hoac sang phai ngau nhien
         dy = -defaultSpeed;
+        Random random = new Random();
+        if(random.nextBoolean()){
+            dx = defaultSpeed;
+        }
+        else {
+            dx = -defaultSpeed;
+        }
 
     }
 
@@ -142,14 +153,14 @@ public class Ball extends MovableObject {
                 // chinh lai vi tri qua bong de tranh bi ket vao vat
                 this.y = other.y - this.height;
             } else {// va cham duoi
-                this.y = other.y + this.height;
+                this.y = other.y + other.height;
             }
         } else {// va cham trai hoac phai
             this.dx = -dx;
             if (this.x < other.x) {// va cham ben trai vat the
                 this.x = other.x - this.width;
             } else {// va cham ben phai vat the
-                this.x = other.x + this.width;
+                this.x = other.x + other.width;
             }
         }
         if (other instanceof Brick) {
