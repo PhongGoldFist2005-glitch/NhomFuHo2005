@@ -89,6 +89,7 @@ public class GameManager extends JPanel implements Runnable {
         gameMusicPlay.play();
     }
 
+    private JButton musicButton;
     /**
      * Constructor of GameManager.
      * @throws LineUnavailableException
@@ -100,6 +101,7 @@ public class GameManager extends JPanel implements Runnable {
         loadLevels(0);
         // Load nhạc sẵn.
         gameMusicPlay = new Music(musicUrl);
+
         // Quản lý màn hình game
         // Truyền kích thước của cửa sổ game.
         this.setPreferredSize(new Dimension((int) boardWidth,(int) boardHeight));
@@ -108,10 +110,23 @@ public class GameManager extends JPanel implements Runnable {
         // Cho phép lưu trữ các buffer của các nhân vật trong game
         this.setDoubleBuffered(true);
 
+        this.setLayout(null);
+
         // Quản lý bàn phím
         // cho panel nhận phím và đăng ký listener
         setFocusable(true);
         addKeyListener(keyBoard);
+
+        // them nut bat tat am thanh khi dang choi
+        musicButton = new JButton();
+        musicButton.setBounds(10,10,50,50);
+        musicButton.setFocusable(false);
+        updatePlayGameMusic();
+        musicButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        musicButton.setVerticalTextPosition(SwingConstants.CENTER);
+        musicButton.addActionListener(e -> gameMusicPlay.toggle());
+        this.add(musicButton);
+        this.setVisible(true);
     }
 
     /**
@@ -204,6 +219,14 @@ public class GameManager extends JPanel implements Runnable {
         }
     }
 
+    String urlSpeakerImage;
+    public void updatePlayGameMusic(){
+        urlSpeakerImage = (gameMusicPlay.isPlaying())
+                ? "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOn.jpg"
+                : "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOff.jpg";
+        musicButton.setIcon(new ImageIcon(urlSpeakerImage));
+    }
+
     /**
      * Theo dõi sự thay đổi của người dùng.
      * tác động lên các class trong game.
@@ -212,15 +235,18 @@ public class GameManager extends JPanel implements Runnable {
      */
     public void update() {
         if (this.soul == 0) {
+            running = false;
             SwingUtilities.invokeLater(() -> {
-            try {
-                EndGame endGame = new EndGame(this);
-                running = false; // dừng thread hiện tại
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        
+                try {
+                    if (gameRuning != null && gameRuning.isAlive()) {
+                        gameRuning.join();
+                    }
+                    new EndGame(this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            return;
         }
         paddle.update();
         ball.checkCollision(paddle);
@@ -282,7 +308,11 @@ public class GameManager extends JPanel implements Runnable {
                 });
             }
         }
+        updatePlayGameMusic();
     }
+
+
+
 
     /**
      * Vẽ vật thể lên màn hình.
@@ -303,6 +333,7 @@ public class GameManager extends JPanel implements Runnable {
         
         g.drawImage(heartImage, (int) getBoardWidth() - 120, 20, 100, 30, null);
 
+        g.drawImage(new ImageIcon(urlSpeakerImage).getImage(), 10,10,50,50,null);
         Graphics2D g2 = (Graphics2D) g;
         
         for (NormalBrick brick : brickList) {
