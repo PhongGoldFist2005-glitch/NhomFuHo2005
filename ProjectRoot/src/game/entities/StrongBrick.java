@@ -29,6 +29,22 @@ public class StrongBrick extends Brick {
         this.type = defaultType;
     }
 
+    public void setType(int newType) {
+        this.type = newType;
+    }
+
+    public int getType() {
+        return this.type;
+    }
+
+    public float getX() {
+        return this.x;
+    }
+
+    public float getY() {
+        return this.y;
+    }
+
     @Override
     public void update() {
         // TODO: Cập nhật trạng thái của gạch

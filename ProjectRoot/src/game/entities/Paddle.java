@@ -113,11 +113,20 @@ public class Paddle extends MovableObject {
         return this.y;
     }
 
-    public float getDefaultWidth(){
-        return defaultWidth;
+    public float getWidth() {
+        return this.width;
     }
 
-    public float getDefaultHeight() {
-        return defaultHeight;
+    public float getDefaultWidth() {
+        float originWidth = defaultWidth;
+        return originWidth;
+    }
+
+    public float getHeight() {
+        return this.height;
+    }
+
+    public void setWidth(float newWidth) {
+        this.width = newWidth;
     }
 }

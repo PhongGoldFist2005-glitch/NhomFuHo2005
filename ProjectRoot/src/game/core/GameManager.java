@@ -52,7 +52,8 @@ public class GameManager extends JPanel implements Runnable {
     String onHeartUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\1heart.png";
     Image heartImage;
     // Level hiện tại của người chơi.
-    private int myLevel = 1;
+    private int myLevel = 0;
+    private boolean winAll = false;
 
     // Khai báo biến map
     private int[][] map;
@@ -63,6 +64,8 @@ public class GameManager extends JPanel implements Runnable {
     // Gọi các đối tượng của class ra
     Paddle paddle = new Paddle(keyBoard, this);
     Ball ball = new Ball(keyBoard, paddle, this);
+    ExpandPaddlePowerUp paddlePower;
+    FastBallPowerUp fastBallPowerUp;
     List<NormalBrick> brickList = new ArrayList<>();
     List<StrongBrick> strongBList = new ArrayList<>();
 
@@ -94,7 +97,7 @@ public class GameManager extends JPanel implements Runnable {
      */
     public GameManager() throws UnsupportedAudioFileException, IOException, LineUnavailableException, UnsupportedAudioFileException, LineUnavailableException {
         // Load levels trong constructor mac dinh la level 0
-        loadLevels(1);
+        loadLevels(0);
         // Load nhạc sẵn.
         gameMusicPlay = new Music(musicUrl);
         // Quản lý màn hình game
@@ -149,10 +152,19 @@ public class GameManager extends JPanel implements Runnable {
                     StrongBrick strongBrick = new StrongBrick(X_pos, Y_pos, this);
                     strongBList.add(strongBrick);
                 }
+                else if (map[i][j] == 3) {
+                    StrongBrick strongBrick = new StrongBrick(X_pos, Y_pos, this);
+                    strongBrick.setType(3);
+                    strongBList.add(strongBrick);
+                }
+                else if (map[i][j] == 4) {
+                    StrongBrick strongBrick = new StrongBrick(X_pos, Y_pos, this);
+                    strongBrick.setType(4);
+                    strongBList.add(strongBrick);
+                }
                 X_pos += brickWidth + gap;
             }
             Y_pos += brickHeight + gap;
-            System.out.println();
         }
     }
 
@@ -163,15 +175,18 @@ public class GameManager extends JPanel implements Runnable {
      * luồng đấy liên tục cập nhật dữ liệu
      * và vẽ các hình ảnh tương ứng lên màn hình.
      */
+
+    private volatile boolean running = false;
     @Override
     public void run() {
+        running = true;
         // Chỉnh cho FPS: 60
         double drawInterval = 1000000000 / FPS;
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
 
-        while (gameRuning != null) {
+        while (running) {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
@@ -179,6 +194,9 @@ public class GameManager extends JPanel implements Runnable {
             if (delta >= 1) {
                 // Update
                 update();
+                if (winAll == true) {
+                    break;
+                }
                 // Repaint
                 repaint();
                 delta --;
@@ -194,13 +212,15 @@ public class GameManager extends JPanel implements Runnable {
      */
     public void update() {
         if (this.soul == 0) {
+            SwingUtilities.invokeLater(() -> {
             try {
                 EndGame endGame = new EndGame(this);
-                gameRuning = null;
+                running = false; // dừng thread hiện tại
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+        });
+        
         }
         paddle.update();
         ball.checkCollision(paddle);
@@ -219,12 +239,49 @@ public class GameManager extends JPanel implements Runnable {
         while (strongBrickIterator.hasNext()) {
             StrongBrick strongBrick = strongBrickIterator.next();
             if (strongBrick.isDestroyed()) {
+                if (strongBrick.getType() == 3) {
+                    this.paddlePower = new ExpandPaddlePowerUp(strongBrick.getX(), strongBrick.getY(), paddle, this);
+                }
+                if (strongBrick.getType() == 4) {
+                    this.fastBallPowerUp = new FastBallPowerUp(strongBrick.getX(), strongBrick.getY(), paddle, ball, this);
+                }
                 strongBrickIterator.remove();
             }
+
             strongBrick.update();
             ball.checkCollision(strongBrick);
         }
+
+        if (paddlePower != null) {
+            this.paddlePower.update();
+            if (!paddlePower.getPower() && this.paddlePower.getY() > getBoardHeight()) {
+                this.paddlePower = null;
+            }
+        }
+        if (fastBallPowerUp != null) {
+            this.fastBallPowerUp.update();
+            if (!fastBallPowerUp.getPower() && this.fastBallPowerUp.getY() > getBoardHeight()) {
+                this.fastBallPowerUp = null;
+            }
+        }
         ball.update();
+
+        if (brickList.isEmpty() && strongBList.isEmpty()) {
+            // → Tất cả gạch đã bị phá hủy
+            myLevel += 1;
+            if (myLevel >= 10) {
+                System.out.println("You are the champion !");
+                winAll = true;
+            } else {
+                SwingUtilities.invokeLater(() -> {
+                    try {
+                        restartGame(myLevel);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        }
     }
 
     /**
@@ -254,13 +311,29 @@ public class GameManager extends JPanel implements Runnable {
         for (StrongBrick brick : strongBList) {
             brick.render(g2);
         }
+        if (this.paddlePower != null) {
+            this.paddlePower.render(g2);
+        }
+
+        if (this.fastBallPowerUp != null) {
+            this.fastBallPowerUp.render(g2);
+        }
+
         paddle.render(g2);
         ball.render(g2);
         g2.dispose();
     }
 
     public void restartGame(int currentLevel) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        
+        if (gameRuning != null && gameRuning.isAlive() && Thread.currentThread() != gameRuning) {
+            running = false; // tắt cờ để thread thoát
+            try {
+                gameRuning.join(); // chờ thread kết thúc hẳn
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         /**
          * Hồi phục mạng gốc.
          */
@@ -276,10 +349,11 @@ public class GameManager extends JPanel implements Runnable {
         /**
          * Load lại map, paddle, gạch game đang thua.
          */
-        loadLevels(currentLevel);
         paddle.resetToDefault();
         ball.setDefaultBallValue();
-
+        fastBallPowerUp = null;
+        paddlePower = null;
+        loadLevels(currentLevel);
         gameThread();
     }
 
@@ -316,6 +390,14 @@ public class GameManager extends JPanel implements Runnable {
 
     public void setLevel(int level) {
         this.myLevel = level;
+    }
+
+    public void setBackGround(String Url) {
+        background = new ImageIcon(Url).getImage();
+    }
+
+    public String getDefaultBackGround() {
+        return this.backgroundURL;
     }
 }
 

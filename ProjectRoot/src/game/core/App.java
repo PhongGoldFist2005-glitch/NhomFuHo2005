@@ -123,5 +123,7 @@ public class App {
     }
 }
 
+// Tốc độ sau khi up màn mới bị nhanh
+// Power Up còn lại
 // https://in.pinterest.com/pin/501236633558057870/
 // https://pngtree.com/canvas/?pid=548180&source_from=user_template&token=7093bf2a1a3b39027accca8bf8a64916.1760110166&action=text&lang=ru

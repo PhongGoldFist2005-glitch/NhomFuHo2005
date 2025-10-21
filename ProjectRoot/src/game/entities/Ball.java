@@ -43,14 +43,13 @@ public class Ball extends MovableObject {
         this.isLaunch = false;
     }
 
-    public Ball(float x, float y, float radius, float speedX, float speedY) {
-        super(x, y, radius * 2, radius * 2, speedX, speedY); // dùng width, height = đường kính
-        // updateVelocity();
-    }
+    // public Ball(float x, float y, float radius, float speedX, float speedY) {
+    //     super(x, y, radius * 2, radius * 2, speedX, speedY); // dùng width, height = đường kính
+    //     // updateVelocity();
+    // }
 
     @Override
     public void update() {
-        // TODO: Cập nhật trạng thái của bóng
         move();
     }
 
@@ -80,12 +79,6 @@ public class Ball extends MovableObject {
         g2.drawOval(drawX, drawY, radius, radius);
     }
 
-//    @Override
-//	public void render() {
-//		// TODO: Vẽ bóng lên màn hình
-//		// Ví dụ: System.out.println("Vẽ bóng tại (" + x + ", " + y + ")");
-//	}
-
     @Override
     public void move() {
         // Cập nhật vị trí của bóng
@@ -109,8 +102,8 @@ public class Ball extends MovableObject {
                 dy = -dy;
             }
             if (this.y >= gameManager.getBoardHeight()) {
-                this.x = paddle.getX() + (paddle.getDefaultWidth() - defaultRadius) / 2;
-                this.y = paddle.getY() - paddle.getDefaultHeight();
+                this.x = paddle.getX() + (paddle.getWidth() - defaultRadius) / 2;
+                this.y = paddle.getY() - paddle.getHeight();
                 isLaunch = false;
                 gameManager.lostSoul();
                 return;
@@ -154,7 +147,6 @@ public class Ball extends MovableObject {
         }
         if (other instanceof Brick) {
             ((Brick) other).takeHit();
-
         }
     }
 
@@ -167,4 +159,26 @@ public class Ball extends MovableObject {
             bounceOff(other);
         }
     }
+
+    public float getDx() {
+        return this.dx;
+    }
+
+    public float getDy() {
+        return this.dy;
+    }
+
+    public void setDx(float newDx) {
+        this.dx = newDx;
+    }
+
+    public void setDy(float newDy) {
+        this.dy = newDy;
+    }
+
+    public float getDefaultSpeed() {
+        float speedUp = defaultSpeed;
+        return speedUp;
+    }
+
 }
