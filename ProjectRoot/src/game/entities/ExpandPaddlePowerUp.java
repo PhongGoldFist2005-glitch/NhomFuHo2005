@@ -6,7 +6,6 @@ import game.core.GameManager;
 
 
 public class ExpandPaddlePowerUp extends PowerUp {
-    protected Paddle paddle;
     // Nó ẩn trong gạch loại 3, gạch loại 3 là gạch loại 2 nhưng có thêm vật thể power up.
     protected static final int type = 3;
     // Xây dựng vật thể nâng cấp
