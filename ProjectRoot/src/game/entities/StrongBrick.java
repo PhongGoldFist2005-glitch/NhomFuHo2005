@@ -55,7 +55,17 @@ public class StrongBrick extends Brick {
     public void render(Graphics2D g2) {
         // TODO: Vẽ gạch lên màn hình
         if (this.check == false) {
-            g2.setColor(Color.decode("#33CCFF"));
+
+            // --- BẮT ĐẦU THAY ĐỔI ---
+            if (this.hitPoints == 2) {
+                // Gạch còn 2 máu, vẽ màu xanh
+                g2.setColor(Color.decode("#33CCFF"));
+            } else if (this.hitPoints == 1) {
+                // Gạch còn 1 máu, vẽ màu hồng (giống NormalBrick)
+                g2.setColor(Color.decode("#FF99CC"));
+            }
+            // --- KẾT THÚC THAY ĐỔI ---
+
             g2.fillRect((int) this.x,(int) this.y,(int) this.width,(int) this.height);
         }
     }

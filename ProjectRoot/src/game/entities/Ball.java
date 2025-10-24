@@ -157,7 +157,20 @@ public class Ball extends MovableObject {
             }
         }
         if (other instanceof Brick) {
-            ((Brick) other).takeHit();
+            // Gọi takeHit() và lưu kết quả (true nếu gạch bị phá hủy)
+            boolean isDestroyed = ((Brick) other).takeHit();
+
+            if (isDestroyed) {
+                // Phát âm thanh gạch vỡ
+                gameManager.playSoundEffect(gameManager.getBreakBrickSoundUrl());
+            } else {
+                // Phát âm thanh va chạm gạch (ví dụ: đập vào StrongBrick)
+                gameManager.playSoundEffect(gameManager.getHitBrickSoundUrl());
+            }
+
+        } else if (other instanceof Paddle) {
+            // Phát âm thanh va chạm với thanh đỡ
+            gameManager.playSoundEffect(gameManager.getHitPaddleSoundUrl());
         }
     }
 

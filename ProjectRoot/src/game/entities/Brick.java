@@ -15,9 +15,9 @@ public class Brick extends GameObject {
     }
 
     // Kiểm tra xem viên gạch đã bị tấn công bao nhiêu lần để trừ máu
-    public void takeHit() {
-        // pass
+    public boolean takeHit() {
         this.hitPoints -= 1;
+        return isDestroyed(); // Trả về true nếu cú đánh này phá hủy gạch
     }
 
     // Kiểm tra xem viên gạch đã bị tiêu diệt hay chưa
