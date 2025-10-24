@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b1084f80-e777-417e-9cc2-0ee92ac121bf" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/ProjectRoot/src/game/core/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectRoot/src/game/core/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectRoot/src/game/core/EndGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectRoot/src/game/core/EndGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectRoot/src/game/core/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectRoot/src/game/core/GameManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectRoot/src/game/entities/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectRoot/src/game/entities/Ball.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectRoot/src/game/entities/Brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectRoot/src/game/entities/Brick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectRoot/src/game/entities/StrongBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectRoot/src/game/entities/StrongBrick.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="34WNuy2w4GIpJU2SRuecrez6je4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.App.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "e2c0b1cb",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "to.speed.mode.migration.done": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b1084f80-e777-417e-9cc2-0ee92ac121bf" name="Changes" comment="" />
+      <created>1761325595485</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1761325595485</updated>
+    </task>
+    <servers />
+  </component>
+</project>
