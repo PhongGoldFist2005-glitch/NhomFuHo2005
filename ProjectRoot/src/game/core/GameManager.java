@@ -465,7 +465,6 @@ public class GameManager extends JPanel implements Runnable {
     public String getDefaultBackGround() {
         return this.backgroundURL;
     }
-
     public String getHitPaddleSoundUrl() { return hitPaddleSoundUrl; }
 
     public String getHitBrickSoundUrl() { return hitBrickSoundUrl; }
