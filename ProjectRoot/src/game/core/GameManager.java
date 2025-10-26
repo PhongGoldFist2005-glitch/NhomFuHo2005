@@ -39,7 +39,7 @@ public class GameManager extends JPanel implements Runnable {
     // FPS của trò chơi: (Từng khung hình vẽ trên 1 giây)
     private final int FPS = 60;
     
-    private String backgroundURL = "E:\\OOP\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\background_earth.jpg";
+    private String backgroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\background_earth.jpg";
     private Image background = new ImageIcon(backgroundURL).getImage();
     
     // Object theo dõi hoạt động của bàn phím.
@@ -47,9 +47,9 @@ public class GameManager extends JPanel implements Runnable {
 
     // Mạng tối đa của người chơi.
     private int soul = 3;
-    String thHeartsUrl = "E:\\OOP\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\3hearts.png";
-    String twHeartsUrl = "E:\\OOP\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\2hearts.png";
-    String onHeartUrl = "E:\\OOP\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\1heart.png";
+    String thHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\3hearts.png";
+    String twHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\2hearts.png";
+    String onHeartUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\1heart.png";
     Image heartImage;
     // Level hiện tại của người chơi.
     private int myLevel = 0;
@@ -58,10 +58,10 @@ public class GameManager extends JPanel implements Runnable {
     // Khai báo biến map
     private int[][] map;
     // Khai báo biến âm thanh
-    private static String musicUrl = "E:\\OOP\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\gameplay.wav";
-    private String hitPaddleSoundUrl = "E:\\OOP\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
-    private String hitBrickSoundUrl = "E:\\OOP\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
-    private String breakBrickSoundUrl = "E:\\OOP\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\break_brick.wav";
+    private static String musicUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\gameplay.wav";
+    private String hitPaddleSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
+    private String hitBrickSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
+    private String breakBrickSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\break_brick.wav";
     Music gameMusicPlay;
 
     // Gọi các đối tượng của class ra
@@ -136,7 +136,7 @@ public class GameManager extends JPanel implements Runnable {
      * Method để load levels từ file JSON
      */
     private void loadLevels(int typeLevel) {
-        List<LevelLoader.Level> levels = LevelLoader.loadLevels("E:\\OOP\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
+        List<LevelLoader.Level> levels = LevelLoader.loadLevels("C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
         
         if (!brickList.isEmpty()) {
             brickList.clear();
@@ -225,8 +225,8 @@ public class GameManager extends JPanel implements Runnable {
     String urlSpeakerImage;
     public void updatePlayGameMusic(){
         urlSpeakerImage = (gameMusicPlay.isPlaying())
-                ? "E:\\OOP\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOn.jpg"
-                : "E:\\OOP\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOff.jpg";
+                ? "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOn.jpg"
+                : "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOff.jpg";
         musicButton.setIcon(new ImageIcon(urlSpeakerImage));
     }
 
@@ -269,10 +269,10 @@ public class GameManager extends JPanel implements Runnable {
             StrongBrick strongBrick = strongBrickIterator.next();
             if (strongBrick.isDestroyed()) {
                 if (strongBrick.getType() == 3) {
-                    this.paddlePower = new ExpandPaddlePowerUp(strongBrick.getX(), strongBrick.getY(), paddle, this);
+                    this.paddlePower = new ExpandPaddlePowerUp(strongBrick.getX(), strongBrick.getY(), paddle, this, ball);
                 }
                 if (strongBrick.getType() == 4) {
-                    this.fastBallPowerUp = new FastBallPowerUp(strongBrick.getX(), strongBrick.getY(), paddle, ball, this);
+                    this.fastBallPowerUp = new FastBallPowerUp(strongBrick.getX(), strongBrick.getY(), paddle, this, ball);
                 }
                 strongBrickIterator.remove();
             }
@@ -407,6 +407,14 @@ public class GameManager extends JPanel implements Runnable {
         /**
          * Load lại map, paddle, gạch game đang thua.
          */
+        if (fastBallPowerUp != null) {
+            fastBallPowerUp.setPower(false);
+        }
+        if (paddlePower != null) {
+            paddlePower.setPower(false);
+        }
+
+        this.setBackGround(getDefaultBackGround());
         paddle.resetToDefault();
         ball.setDefaultBallValue();
         fastBallPowerUp = null;
