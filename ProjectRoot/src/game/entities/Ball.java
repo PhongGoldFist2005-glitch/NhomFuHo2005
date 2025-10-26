@@ -20,6 +20,10 @@ public class Ball extends MovableObject {
     protected static final float defaultSpeed = 4;
     protected static final int defaultPowerUp = 1;
     protected Paddle paddle;
+    protected static final Color defaultColor_1 = new Color(255, 255, 255);
+    protected static final Color defaultColor_2 = new Color(50, 150, 255);
+    protected Color color_1;
+    protected Color color_2;
 
     public Ball(KeyPress keyH, Paddle paddle, GameManager gameManager) {
         // - 20 la default radius
@@ -31,6 +35,8 @@ public class Ball extends MovableObject {
         this.defaultY = this.gameManager.getBoardHeight() - 30;
         this.currentPowerUp = 1;
         this.isLaunch = false;
+        this.color_1 = defaultColor_1;
+        this.color_2 = defaultColor_2;
     }
 
     public void setDefaultBallValue() {
@@ -41,13 +47,10 @@ public class Ball extends MovableObject {
         this.dx = defaultSpeed;
         this.dy = defaultSpeed;
         this.currentPowerUp = defaultPowerUp;
+        this.color_1 = defaultColor_1;
+        this.color_2 = defaultColor_2;
         this.isLaunch = false;
     }
-
-    // public Ball(float x, float y, float radius, float speedX, float speedY) {
-    //     super(x, y, radius * 2, radius * 2, speedX, speedY); // dùng width, height = đường kính
-    //     // updateVelocity();
-    // }
 
     @Override
     public void update() {
@@ -68,8 +71,8 @@ public class Ball extends MovableObject {
 
         // Bóng chính với gradient
         GradientPaint gradient = new GradientPaint(
-                drawX, drawY, new Color(255, 255, 255),
-                drawX + radius, drawY + radius, new Color(50, 150, 255)
+                drawX, drawY, color_1,
+                drawX + radius, drawY + radius, color_2
         );
         g2.setPaint(gradient);
         g2.fillOval(drawX, drawY, radius, radius);
@@ -157,7 +160,20 @@ public class Ball extends MovableObject {
             }
         }
         if (other instanceof Brick) {
-            ((Brick) other).takeHit();
+            // Gọi takeHit() và lưu kết quả (true nếu gạch bị phá hủy)
+            boolean isDestroyed = ((Brick) other).takeHit();
+
+            if (isDestroyed) {
+                // Phát âm thanh gạch vỡ
+                gameManager.playSoundEffect(gameManager.getBreakBrickSoundUrl());
+            } else {
+                // Phát âm thanh va chạm gạch (ví dụ: đập vào StrongBrick)
+                gameManager.playSoundEffect(gameManager.getHitBrickSoundUrl());
+            }
+
+        } else if (other instanceof Paddle) {
+            // Phát âm thanh va chạm với thanh đỡ
+            gameManager.playSoundEffect(gameManager.getHitPaddleSoundUrl());
         }
     }
 
@@ -192,4 +208,13 @@ public class Ball extends MovableObject {
         return speedUp;
     }
 
+    public void setColor(Color color1, Color color2) {
+        this.color_1 = color1;
+        this.color_2 = color2;
+    }
+
+    public void setDefalaultColor() {
+        this.color_1 = defaultColor_1;
+        this.color_2 = defaultColor_2;
+    }
 }

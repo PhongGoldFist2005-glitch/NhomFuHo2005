@@ -9,13 +9,15 @@ public class PowerUp extends GameObject {
     protected float speed = 2;
     protected boolean havePower = false;
     protected long start;
+    Ball ball;
     Paddle paddle;
 
     // Xây dựng vật thể nâng cấp
-    public PowerUp(float x, float y, float width, float height, int type, Paddle paddle) {
+    public PowerUp(float x, float y, float width, float height, int type, Paddle paddle, Ball ball) {
         super(x, y, width, height);
         this.type = type;
         this.paddle = paddle;
+        this.ball = ball;
     }
 
 

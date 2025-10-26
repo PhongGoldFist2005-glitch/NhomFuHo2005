@@ -1,7 +1,6 @@
 package game.core;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import javax.swing.*;
 
 import game.entities.*;
@@ -10,6 +9,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -39,7 +39,7 @@ public class GameManager extends JPanel implements Runnable {
     // FPS của trò chơi: (Từng khung hình vẽ trên 1 giây)
     private final int FPS = 60;
     
-    private String backgroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\background_earth.jpg";
+    private String backgroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\background_earth.jpg";
     private Image background = new ImageIcon(backgroundURL).getImage();
     
     // Object theo dõi hoạt động của bàn phím.
@@ -47,9 +47,9 @@ public class GameManager extends JPanel implements Runnable {
 
     // Mạng tối đa của người chơi.
     private int soul = 3;
-    String thHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\3hearts.png";
-    String twHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\2hearts.png";
-    String onHeartUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\1heart.png";
+    String thHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\3hearts.png";
+    String twHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\2hearts.png";
+    String onHeartUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\1heart.png";
     Image heartImage;
     // Level hiện tại của người chơi.
     private int myLevel = 0;
@@ -58,7 +58,10 @@ public class GameManager extends JPanel implements Runnable {
     // Khai báo biến map
     private int[][] map;
     // Khai báo biến âm thanh
-    private static String musicUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\gameplay.wav";
+    private static String musicUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\gameplay.wav";
+    private String hitPaddleSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
+    private String hitBrickSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
+    private String breakBrickSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\break_brick.wav";
     Music gameMusicPlay;
 
     // Gọi các đối tượng của class ra
@@ -133,7 +136,7 @@ public class GameManager extends JPanel implements Runnable {
      * Method để load levels từ file JSON
      */
     private void loadLevels(int typeLevel) {
-        List<LevelLoader.Level> levels = LevelLoader.loadLevels("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
+        List<LevelLoader.Level> levels = LevelLoader.loadLevels("C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
         
         if (!brickList.isEmpty()) {
             brickList.clear();
@@ -222,8 +225,8 @@ public class GameManager extends JPanel implements Runnable {
     String urlSpeakerImage;
     public void updatePlayGameMusic(){
         urlSpeakerImage = (gameMusicPlay.isPlaying())
-                ? "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOn.jpg"
-                : "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOff.jpg";
+                ? "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOn.jpg"
+                : "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOff.jpg";
         musicButton.setIcon(new ImageIcon(urlSpeakerImage));
     }
 
@@ -266,10 +269,10 @@ public class GameManager extends JPanel implements Runnable {
             StrongBrick strongBrick = strongBrickIterator.next();
             if (strongBrick.isDestroyed()) {
                 if (strongBrick.getType() == 3) {
-                    this.paddlePower = new ExpandPaddlePowerUp(strongBrick.getX(), strongBrick.getY(), paddle, this);
+                    this.paddlePower = new ExpandPaddlePowerUp(strongBrick.getX(), strongBrick.getY(), paddle, this, ball);
                 }
                 if (strongBrick.getType() == 4) {
-                    this.fastBallPowerUp = new FastBallPowerUp(strongBrick.getX(), strongBrick.getY(), paddle, ball, this);
+                    this.fastBallPowerUp = new FastBallPowerUp(strongBrick.getX(), strongBrick.getY(), paddle, this, ball);
                 }
                 strongBrickIterator.remove();
             }
@@ -312,7 +315,30 @@ public class GameManager extends JPanel implements Runnable {
         updatePlayGameMusic();
     }
 
+    /**
+     * Phương thức mới để phát các hiệu ứng âm thanh (SFX) ngắn, chỉ một lần.
+     * @param soundFilePath Đường dẫn đến file .wav
+     */
+    public void playSoundEffect(String soundFilePath) {
+        try {
+            File soundFile = new File(soundFilePath);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
+            Clip soundClip = AudioSystem.getClip();
+            soundClip.open(audioStream);
 
+            // Thêm một listener để tự động đóng clip khi nó phát xong
+            // Điều này ngăn rò rỉ bộ nhớ từ hàng ngàn clip đang mở
+            soundClip.addLineListener(event -> {
+                if (event.getType() == LineEvent.Type.STOP) {
+                    event.getLine().close();
+                }
+            });
+
+            soundClip.start(); // Phát một lần
+        } catch (Exception e) {
+            System.err.println("Không thể phát hiệu ứng âm thanh: " + e.getMessage());
+        }
+    }
 
 
     /**
@@ -381,6 +407,14 @@ public class GameManager extends JPanel implements Runnable {
         /**
          * Load lại map, paddle, gạch game đang thua.
          */
+        if (fastBallPowerUp != null) {
+            fastBallPowerUp.setPower(false);
+        }
+        if (paddlePower != null) {
+            paddlePower.setPower(false);
+        }
+
+        this.setBackGround(getDefaultBackGround());
         paddle.resetToDefault();
         ball.setDefaultBallValue();
         fastBallPowerUp = null;
@@ -431,6 +465,12 @@ public class GameManager extends JPanel implements Runnable {
     public String getDefaultBackGround() {
         return this.backgroundURL;
     }
+
+    public String getHitPaddleSoundUrl() { return hitPaddleSoundUrl; }
+
+    public String getHitBrickSoundUrl() { return hitBrickSoundUrl; }
+
+    public String getBreakBrickSoundUrl() { return breakBrickSoundUrl; }
 }
 
 // Ăn power up load background mới.
