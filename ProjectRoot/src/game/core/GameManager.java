@@ -7,6 +7,7 @@ import game.entities.*;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.File;
@@ -14,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 
 public class GameManager extends JPanel implements Runnable {
@@ -33,35 +37,41 @@ public class GameManager extends JPanel implements Runnable {
     // Kích thước của toàn màn hình
     // Scale
     private int offset = 250;
+    // 1460 x 665
     public float boardWidth = widthPix * scale * rowCount + 2 * offset;
     public float boardHeight = heightPix * scale * colCount + offset / 2;
 
     // FPS của trò chơi: (Từng khung hình vẽ trên 1 giây)
     private final int FPS = 60;
     
-    private String backgroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\background_earth.jpg";
+    private String backgroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\base.jpg";
     private Image background = new ImageIcon(backgroundURL).getImage();
-    
+    private String gameFrame = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\gameFrame1.jpg";
+    private Image gameFrameImage = new ImageIcon(gameFrame).getImage();
+
     // Object theo dõi hoạt động của bàn phím.
     private KeyPress keyBoard = new KeyPress();
 
     // Mạng tối đa của người chơi.
     private int soul = 3;
-    String thHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\3hearts.png";
-    String twHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\2hearts.png";
-    String onHeartUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\1heart.png";
+    String thHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\3hearts.png";
+    String twHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\2hearts.png";
+    String onHeartUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\1heart.png";
     Image heartImage;
     // Level hiện tại của người chơi.
     private int myLevel = 0;
     private boolean winAll = false;
+    // Điểm số của người chơi.
+    private int myScore = 0;
+    Image scoreImage = new ImageIcon("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\gameboard.png").getImage();
 
     // Khai báo biến map
     private int[][] map;
     // Khai báo biến âm thanh
-    private static String musicUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\gameplay.wav";
-    private String hitPaddleSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
-    private String hitBrickSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
-    private String breakBrickSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\break_brick.wav";
+    private static String musicUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\gameplay.wav";
+    private String hitPaddleSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
+    private String hitBrickSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
+    private String breakBrickSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\break_brick.wav";
     Music gameMusicPlay;
 
     // Gọi các đối tượng của class ra
@@ -71,6 +81,11 @@ public class GameManager extends JPanel implements Runnable {
     FastBallPowerUp fastBallPowerUp;
     List<NormalBrick> brickList = new ArrayList<>();
     List<StrongBrick> strongBList = new ArrayList<>();
+
+    List<Bullet> bulletList = new ArrayList<>();
+    LaserPaddlePowerUp laserPower;
+    private long lastShotTime = 0;
+    private final long shootCooldown = 300; // 300ms giữa mỗi lần bắn
 
     private Thread gameRuning;
 
@@ -122,7 +137,7 @@ public class GameManager extends JPanel implements Runnable {
 
         // them nut bat tat am thanh khi dang choi
         musicButton = new JButton();
-        musicButton.setBounds(10,10,50,50);
+        musicButton.setBounds(80,40,30,30);
         musicButton.setFocusable(false);
         updatePlayGameMusic();
         musicButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -136,7 +151,7 @@ public class GameManager extends JPanel implements Runnable {
      * Method để load levels từ file JSON
      */
     private void loadLevels(int typeLevel) {
-        List<LevelLoader.Level> levels = LevelLoader.loadLevels("C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
+        List<LevelLoader.Level> levels = LevelLoader.loadLevels("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
         
         if (!brickList.isEmpty()) {
             brickList.clear();
@@ -150,7 +165,7 @@ public class GameManager extends JPanel implements Runnable {
 
         // In ra để kiểm tra
         float gap = 10;
-        float Y_pos = 50;
+        float Y_pos = 100;
         System.out.println("Loaded map:");
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
@@ -178,6 +193,11 @@ public class GameManager extends JPanel implements Runnable {
                 else if (map[i][j] == 4) {
                     StrongBrick strongBrick = new StrongBrick(X_pos, Y_pos, this);
                     strongBrick.setType(4);
+                    strongBList.add(strongBrick);
+                }
+                else if (map[i][j] == 5) { // '5' là ID cho power-up bắn đạn
+                    StrongBrick strongBrick = new StrongBrick(X_pos, Y_pos, this);
+                    strongBrick.setType(5); // Gán type 5
                     strongBList.add(strongBrick);
                 }
                 X_pos += brickWidth + gap;
@@ -225,8 +245,8 @@ public class GameManager extends JPanel implements Runnable {
     String urlSpeakerImage;
     public void updatePlayGameMusic(){
         urlSpeakerImage = (gameMusicPlay.isPlaying())
-                ? "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOn.jpg"
-                : "C:\\Users\\admin\\Documents\\GitHub\\NhoFuHo2005Temp\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOff.jpg";
+                ? "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOn.jpg"
+                : "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOff.jpg";
         musicButton.setIcon(new ImageIcon(urlSpeakerImage));
     }
 
@@ -254,11 +274,30 @@ public class GameManager extends JPanel implements Runnable {
         paddle.update();
         ball.checkCollision(paddle);
 
+        if (paddle.canShoot() && keyBoard.launch && ball.isLaunched()) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastShotTime > shootCooldown) {
+                // Tạo 2 viên đạn từ 2 bên của paddle
+                float bulletX1 = paddle.getX() + 10; // Đạn bên trái
+                float bulletX2 = paddle.getX() + paddle.getWidth() - 10 - 8; // Đạn bên phải (trừ 10 padding, 8 là chiều rộng đạn)
+                float bulletY = paddle.getY(); // Bắn từ đỉnh paddle
+
+                bulletList.add(new Bullet(bulletX1, bulletY));
+                bulletList.add(new Bullet(bulletX2, bulletY));
+
+                lastShotTime = currentTime;
+
+                // (Tùy chọn) Thêm âm thanh bắn đạn ở đây
+                // playSoundEffect(yourShootSoundUrl);
+            }
+        }
+
         Iterator<NormalBrick> normalBrickIterator = brickList.iterator();
         while (normalBrickIterator.hasNext()) {
             Brick brick = normalBrickIterator.next();
             if (brick.isDestroyed()) {
                 normalBrickIterator.remove();
+                myScore += 100;
             }
             brick.update();
             ball.checkCollision(brick);
@@ -268,12 +307,16 @@ public class GameManager extends JPanel implements Runnable {
         while (strongBrickIterator.hasNext()) {
             StrongBrick strongBrick = strongBrickIterator.next();
             if (strongBrick.isDestroyed()) {
-                if (strongBrick.getType() == 3) {
+                if (strongBrick.getType() == 3 && this.paddlePower == null && this.fastBallPowerUp == null && this.laserPower == null) {
                     this.paddlePower = new ExpandPaddlePowerUp(strongBrick.getX(), strongBrick.getY(), paddle, this, ball);
                 }
-                if (strongBrick.getType() == 4) {
+                if (strongBrick.getType() == 4 && this.fastBallPowerUp == null && this.paddlePower == null && this.laserPower == null) {
                     this.fastBallPowerUp = new FastBallPowerUp(strongBrick.getX(), strongBrick.getY(), paddle, this, ball);
                 }
+                if (strongBrick.getType() == 5 && this.laserPower == null && this.paddlePower == null && this.fastBallPowerUp == null) {
+                    this.laserPower = new LaserPaddlePowerUp(strongBrick.getX(), strongBrick.getY(), paddle, this, ball);
+                }
+                myScore += 200;
                 strongBrickIterator.remove();
             }
 
@@ -284,16 +327,72 @@ public class GameManager extends JPanel implements Runnable {
         if (paddlePower != null) {
             this.paddlePower.update();
             if (!paddlePower.getPower() && this.paddlePower.getY() > getBoardHeight()) {
+                this.paddlePower.turnOffMusic();
                 this.paddlePower = null;
             }
         }
         if (fastBallPowerUp != null) {
             this.fastBallPowerUp.update();
             if (!fastBallPowerUp.getPower() && this.fastBallPowerUp.getY() > getBoardHeight()) {
+                this.fastBallPowerUp.turnOffMusic();
                 this.fastBallPowerUp = null;
             }
         }
+        if (laserPower != null) {
+            this.laserPower.update();
+            // Xóa powerup nếu nó rơi ra ngoài màn hình và chưa được kích hoạt
+            if (!laserPower.getPower() && this.laserPower.getY() > getBoardHeight()) {
+                this.laserPower.turnOffMusic();
+                this.laserPower = null;
+            }
+        }
         ball.update();
+
+        Iterator<Bullet> bulletIterator = bulletList.iterator();
+        while (bulletIterator.hasNext()) {
+            Bullet bullet = bulletIterator.next();
+            bullet.update();
+
+            // Xóa đạn nếu ra khỏi màn hình
+            if (bullet.isOffScreen()) {
+                bulletIterator.remove();
+                continue;
+            }
+
+            // Kiểm tra va chạm của đạn với gạch
+            boolean hitBrick = false;
+
+            // Kiểm tra gạch thường
+            Iterator<NormalBrick> normBrickIt = brickList.iterator();
+            while (normBrickIt.hasNext()) {
+                Brick brick = normBrickIt.next();
+                if (bullet.getBounds().intersects(brick.getBounds())) {
+                    if (brick.takeHit()) playSoundEffect(getBreakBrickSoundUrl());
+                    else playSoundEffect(getHitBrickSoundUrl());
+                    hitBrick = true;
+                    break; // Đạn chỉ va chạm 1 gạch
+                }
+            }
+
+            // Kiểm tra gạch cứng (nếu chưa trúng gạch thường)
+            if (!hitBrick) {
+                Iterator<StrongBrick> strongBrickIt = strongBList.iterator();
+                while (strongBrickIt.hasNext()) {
+                    StrongBrick brick = strongBrickIt.next();
+                    if (bullet.getBounds().intersects(brick.getBounds())) {
+                        if (brick.takeHit()) playSoundEffect(getBreakBrickSoundUrl());
+                        else playSoundEffect(getHitBrickSoundUrl());
+                        hitBrick = true;
+                        break; // Đạn chỉ va chạm 1 gạch
+                    }
+                }
+            }
+
+            // Xóa đạn nếu nó trúng gạch
+            if (hitBrick) {
+                bulletIterator.remove();
+            }
+        }
 
         if (brickList.isEmpty() && strongBList.isEmpty()) {
             // → Tất cả gạch đã bị phá hủy
@@ -304,7 +403,7 @@ public class GameManager extends JPanel implements Runnable {
             } else {
                 SwingUtilities.invokeLater(() -> {
                     try {
-                        restartGame(myLevel);
+                        restartGame(myLevel, this.myScore);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -348,6 +447,9 @@ public class GameManager extends JPanel implements Runnable {
      */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+
+        // g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         if (this.soul == 3) {
             this.heartImage = new ImageIcon(thHeartsUrl).getImage();
         } else if (this.soul == 2) {
@@ -356,12 +458,35 @@ public class GameManager extends JPanel implements Runnable {
             this.heartImage = new ImageIcon(onHeartUrl).getImage();
         }
 
-        g.drawImage(background, 0, 0,(int) this.getBoardWidth(),(int) this.getBoardHeight(), null);
+        g.drawImage(gameFrameImage, 0, 0,(int) this.getBoardWidth() ,(int) this.getBoardHeight() , null);
         
-        g.drawImage(heartImage, (int) getBoardWidth() - 120, 20, 100, 30, null);
+        int backX = 30;
+        int backY = 25;
+        int widthBack = (int) this.getBoardWidth() - 70;
+        int heightBack = (int) this.getBoardHeight() - 45;
+        int arc = 200;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Shape clip = new RoundRectangle2D.Float(backX, backY, widthBack, heightBack, arc, arc);
+        g2.setClip(clip);
+        g.drawImage(background, backX, backY,widthBack ,heightBack, null);
+        
+        g.drawImage(scoreImage, (int) this.getBoardWidth() / 2 - 100, 25, 200, 60, null);
+        g2.setFont(new Font("Star Jedi", Font.BOLD, 20));
+        g2.setColor(Color.BLACK);
+        for (int i = -2; i <= 2; i++) {
+            for (int j = -2; j <= 2; j++)
+                g2.drawString("Score: " + myScore, (int) getBoardWidth()/2 - 43 + i, 62 + j);
+        }
+        // Hiệu ứng bóng (viết chữ đen phía sau)
+        g2.drawString("Score: " + myScore, (int) getBoardWidth()/2 - 43, 62);
 
-        g.drawImage(new ImageIcon(urlSpeakerImage).getImage(), 10,10,50,50,null);
-        Graphics2D g2 = (Graphics2D) g;
+        // Viết chữ chính (màu sáng)
+        g2.setColor(new Color(255, 215, 0));
+        g2.drawString("Score: " + myScore, (int) getBoardWidth()/2 - 45, 60);
+        
+        g.drawImage(heartImage, (int) getBoardWidth() - 230, 30, 100, 30, null);
+
+        g.drawImage(new ImageIcon(urlSpeakerImage).getImage(), 80,40,30,30,null);
         
         for (NormalBrick brick : brickList) {
             brick.render(g2);
@@ -377,12 +502,21 @@ public class GameManager extends JPanel implements Runnable {
             this.fastBallPowerUp.render(g2);
         }
 
+        if (this.laserPower != null) {
+            this.laserPower.render(g2);
+        }
+
+        // --- VẼ TẤT CẢ ĐẠN ---
+        for (Bullet bullet : bulletList) {
+            bullet.render(g2);
+        }
+
         paddle.render(g2);
         ball.render(g2);
         g2.dispose();
     }
 
-    public void restartGame(int currentLevel) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+    public void restartGame(int currentLevel, int currentScore) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         if (gameRuning != null && gameRuning.isAlive() && Thread.currentThread() != gameRuning) {
             running = false; // tắt cờ để thread thoát
             try {
@@ -396,6 +530,7 @@ public class GameManager extends JPanel implements Runnable {
          * Hồi phục mạng gốc.
          */
         this.soul = 3;
+        this.myScore = currentScore;
         
         /**
          * Điều chỉnh âm thanh về mặc định.
@@ -409,9 +544,16 @@ public class GameManager extends JPanel implements Runnable {
          */
         if (fastBallPowerUp != null) {
             fastBallPowerUp.setPower(false);
+            fastBallPowerUp.turnOffMusic();
         }
         if (paddlePower != null) {
             paddlePower.setPower(false);
+            paddlePower.turnOffMusic();
+        }
+
+        if (laserPower != null) {
+            laserPower.setPower(false);
+            laserPower.turnOffMusic();
         }
 
         this.setBackGround(getDefaultBackGround());
@@ -419,6 +561,8 @@ public class GameManager extends JPanel implements Runnable {
         ball.setDefaultBallValue();
         fastBallPowerUp = null;
         paddlePower = null;
+        laserPower = null; // Xóa powerup
+        bulletList.clear(); // Xóa hết đạn còn sót lại
         loadLevels(currentLevel);
         gameThread();
     }

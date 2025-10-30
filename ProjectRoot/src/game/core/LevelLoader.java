@@ -13,26 +13,12 @@ import java.util.Map;
 public class LevelLoader {
 
     // Lớp con biểu diễn 1 loại gạch
-    public static class BrickType {
-        String type;
-        int health;
-        String color;
-        int points;
-        String powerUp;
-    }
 
     // Lớp con biểu diễn 1 level trong game
     public static class Level {
         int level;
         String name;
-        int width;
-        int height;
-        int tileWidth;
-        int tileHeight;
         int[][] map;
-        Map<String, BrickType> brickTypes;
-        int ballSpeed;
-        int paddleWidth;
     }
 
     /**
