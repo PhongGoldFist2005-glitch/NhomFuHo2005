@@ -12,34 +12,34 @@ public class ExpandPaddlePowerUp extends PowerUp {
     protected static final float width = 20;
     protected static final float height = 20;
     protected float upgradeWidth;
-    public String newBackGroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\background_fire.png";
+    public String newBackGroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\hot.jpg";
     GameManager gameManager;
+    
 
     public ExpandPaddlePowerUp(float x, float y, Paddle paddle, GameManager gameManager, Ball ball) {
         super(x, y, width, height, type, paddle,ball);
-        this.upgradeWidth = paddle.getWidth() + 100;
+        this.upgradeWidth = paddle.getDefaultWidth() + 100;
         this.gameManager = gameManager;
     }
 
     public void upgradePaddle() {
         if (havePower == true) {
+            if (!musicPowerUp.isPlaying()) {
+                musicPowerUp.play();
+            }
+
             this.paddle.setWidth(upgradeWidth);
             gameManager.setBackGround(newBackGroundURL);
             ball.setColor(Color.orange, Color.RED);
         }
         else {
+            if (musicPowerUp.isPlaying()) {
+                musicPowerUp.stop();
+            }
             this.paddle.setWidth(this.paddle.getDefaultWidth());
             gameManager.setBackGround(gameManager.getDefaultBackGround());
             ball.setDefalaultColor();
         }
-    }
-
-    public float getX() {
-        return this.x;
-    }
-
-    public float getY() {
-        return this.y;
     }
 
     @Override

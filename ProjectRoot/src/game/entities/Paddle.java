@@ -21,20 +21,22 @@ public class Paddle extends MovableObject {
     protected static final float defaultHeight = 10;
     protected static final float defaultSpeed = 10;
     protected int defaultPowerUp = 1;
+    private boolean canShoot = false;
 
     public Paddle(KeyPress keyH, GameManager gameManager) {
 
         // Truyền giá trị mặc định ban đầu cho super
-//        float startWidth = gameManager.getBoardWidth() / 2;
-//        float startHeight = gameManager.getBoardHeight();
+        //float startWidth = gameManager.getBoardWidth() / 2;
+        //float startHeight = gameManager.getBoardHeight();
         // Để hiện thị chiều cao của thanh trượt
         // lấy chiều cao toàn màn hình - chiều cao của vật thể
-        super((gameManager.getBoardWidth() - defaultWidth) / 2, gameManager.getBoardHeight() - defaultHeight - 5, defaultWidth, defaultHeight, defaultSpeed, 0);
+        super((gameManager.getBoardWidth() - defaultWidth) / 2, gameManager.getBoardHeight() - defaultHeight - 40, defaultWidth, defaultHeight, defaultSpeed, 0);
         this.keyH = keyH;
         this.gameManager = gameManager;
         this.defaultX = (gameManager.getBoardWidth() - defaultWidth) / 2;
-        this.defaultY = gameManager.getBoardHeight() - defaultHeight - 5;
+        this.defaultY = gameManager.getBoardHeight() - defaultHeight - 40;
         this.currentPowerUp = defaultPowerUp;
+        this.canShoot = false;
     }
 
     // Sau này nếu bạn muốn reset về mặc định:
@@ -72,16 +74,16 @@ public class Paddle extends MovableObject {
 	@Override
 	public void move() {
         if (moveLeft()) {
-            if (this.x - dx < 0) {
-                this.x = 0;
+            if (this.x - dx < 30) {
+                this.x = 30;
             } else {
                 this.x -= dx;
             }
         }
 
         if (moveRight()) {
-			if (this.x + this.width + dx > gameManager.getBoardWidth()) {
-				this.x = gameManager.getBoardWidth() - this.width;
+			if (this.x + this.width + dx > gameManager.getBoardWidth() - 40) {
+				this.x = gameManager.getBoardWidth() - this.width - 40;
 			} else {
 				this.x += dx;
 			}
@@ -128,5 +130,22 @@ public class Paddle extends MovableObject {
 
     public void setWidth(float newWidth) {
         this.width = newWidth;
+    }
+
+    // TP them tu day
+    /**
+     * Setter để bật/tắt khả năng bắn.
+     * @param canShoot true để cho phép bắn, false để vô hiệu hóa.
+     */
+    public void setCanShoot(boolean canShoot) {
+        this.canShoot = canShoot;
+    }
+
+    /**
+     * Getter để kiểm tra xem paddle có thể bắn không.
+     * @return true nếu paddle có thể bắn.
+     */
+    public boolean canShoot() {
+        return this.canShoot;
     }
 }

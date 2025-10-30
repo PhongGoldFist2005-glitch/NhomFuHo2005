@@ -2,6 +2,8 @@ package game.entities;
 
 import java.awt.*;
 
+import game.core.Music;
+
 // Vât phẩm nâng cấp sức mạnh rơi ra khi phá gạch cho quả bóng hoặc ván.
 public class PowerUp extends GameObject {
     protected int type;
@@ -11,10 +13,17 @@ public class PowerUp extends GameObject {
     protected long start;
     Ball ball;
     Paddle paddle;
+    private static final String musicPower = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\powerup.wav";
+    Music musicPowerUp;
 
     // Xây dựng vật thể nâng cấp
     public PowerUp(float x, float y, float width, float height, int type, Paddle paddle, Ball ball) {
         super(x, y, width, height);
+            try {
+                musicPowerUp = new Music(musicPower);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         this.type = type;
         this.paddle = paddle;
         this.ball = ball;
@@ -52,6 +61,18 @@ public class PowerUp extends GameObject {
         return this.havePower;
     }
 
+    public float getX() {
+        return this.x;
+    }
+
+    public float getY() {
+        return this.y;
+    }
+
+    public void turnOffMusic() {
+        musicPowerUp.stop();
+    }
+    
     @Override
     public void update() {
     };
