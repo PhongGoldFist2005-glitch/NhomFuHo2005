@@ -28,6 +28,7 @@ public class LaserPaddlePowerUp extends PowerUp {
             // Khi có power, cho phép paddle bắn
             this.paddle.setCanShoot(true);
             // Bạn có thể thay đổi màu paddle ở đây nếu muốn
+            ball.setColor(Color.decode("#0F172A"), Color.decode("#22D3EE"));
             gameManager.setBackGround(newBackGroundURL);
         } else {
             if (musicPowerUp.isPlaying()) {
@@ -35,6 +36,7 @@ public class LaserPaddlePowerUp extends PowerUp {
             }
             // Khi hết power, không cho phép paddle bắn nữa
             this.paddle.setCanShoot(false);
+            ball.setDefalaultColor();
             gameManager.setBackGround(gameManager.getDefaultBackGround());
         }
     }
