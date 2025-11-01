@@ -13,7 +13,7 @@ public class PowerUp extends GameObject {
     protected long start;
     Ball ball;
     Paddle paddle;
-    private static final String musicPower = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\powerup.wav";
+    private static final String musicPower = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\powerup.wav";
     Music musicPowerUp;
 
     // Xây dựng vật thể nâng cấp

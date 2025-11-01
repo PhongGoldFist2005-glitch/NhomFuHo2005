@@ -22,7 +22,7 @@ public class EndGame {
 
         // Background panel
         JPanel endPanel = new JPanel() {
-            String imageUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MainScreen.jpeg";
+            String imageUrl = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MainScreen.jpeg";
             private Image background = new ImageIcon(imageUrl).getImage();
             @Override
             protected void paintComponent(Graphics g) {
@@ -41,7 +41,7 @@ public class EndGame {
         JButton restartButton = new JButton();
         restartButton.setBounds((endGameWidth - endButtonWidth) / 2, (endGameHeight / 2) - 50, endButtonWidth, endButtonHeight);
         restartButton.setFocusable(false);
-        ImageIcon restartIcon = new ImageIcon("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\play.png");
+        ImageIcon restartIcon = new ImageIcon("C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\play.png");
         restartButton.setIcon(restartIcon);
         restartButton.addActionListener(e -> {
             try {
@@ -56,7 +56,7 @@ public class EndGame {
         // Exit button
         JButton exitButton = new JButton();
         exitButton.setBounds((endGameWidth - endButtonWidth) / 2, (endGameHeight / 2) + 50, endButtonWidth, endButtonHeight);
-        ImageIcon exitIcon = new ImageIcon("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\exit.png");
+        ImageIcon exitIcon = new ImageIcon("C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\exit.png");
         exitButton.setIcon(exitIcon);
         exitButton.addActionListener(e -> System.exit(0));
         endFrame.add(exitButton);

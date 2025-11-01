@@ -1,15 +1,9 @@
 package game.core;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
+import java.util.List;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 /**
  * Tạo Frame để chạy các tác vụ.
@@ -30,7 +24,7 @@ public class App {
 
         // Xây dựng background cho jframe.
         JPanel menuPanel = new JPanel() {
-            String imageUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MainScreen.jpeg";
+            String imageUrl = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MainScreen.jpeg";
             private Image background = new ImageIcon(imageUrl).getImage();
 
             @Override
@@ -43,7 +37,7 @@ public class App {
         menuFrame.setContentPane(menuPanel);
         menuFrame.setLayout(null);
 
-        String musicFile = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\background.wav";
+        String musicFile = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\background.wav";
         Music musicHall = new Music(musicFile);
         musicHall.play();
 
@@ -51,19 +45,19 @@ public class App {
         JButton startButton = new JButton("Start Game");
         startButton.setBounds((int) (gameWidth / 2) - 100,(int) (gameHeight / 2) - 100, 200, 55);
         startButton.setFocusable(false);
-        ImageIcon startIcon = new ImageIcon("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\play.png");
+        ImageIcon startIcon = new ImageIcon("C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\play.png");
         startButton.setText("");
         startButton.setIcon(startIcon);
         startButton.setHorizontalTextPosition(SwingConstants.CENTER);
         startButton.setVerticalTextPosition(SwingConstants.CENTER);
-        startButton.addActionListener(e -> startGame(menuFrame, gameManager, musicHall));
-        menuFrame.add(startButton, BorderLayout.CENTER);
+        startButton.addActionListener(e -> openLevelSelectorDialog(menuFrame, gameManager, musicHall));
+        menuFrame.add(startButton);
 
         // Nút tắt mở nhạc.
         JButton musicButton = new JButton("Turn On Music");
         musicButton.setBounds((int) (gameWidth / 2) - 100,(int) (gameHeight / 2), 200, 55);
         musicButton.setFocusable(false);
-        ImageIcon musicIcon = new ImageIcon("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\audio.png");
+        ImageIcon musicIcon = new ImageIcon("C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\audio.png");
         musicButton.setText("");
         musicButton.setIcon(musicIcon);
         musicButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -75,7 +69,7 @@ public class App {
         JButton exitButton = new JButton("Exit");
         exitButton.setBounds((int) (gameWidth / 2) - 100,(int) (gameHeight / 2) + 100, 200, 55);
         exitButton.setFocusable(false);
-        ImageIcon exitIcon = new ImageIcon("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\exit.png");
+        ImageIcon exitIcon = new ImageIcon("C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\exit.png");
         exitButton.setText("");
         exitButton.setIcon(exitIcon);
         exitButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -84,6 +78,47 @@ public class App {
         menuFrame.add(exitButton);
 
         menuFrame.setVisible(true);
+    }
+
+    // Cửa sổ chọn màn
+    private static void openLevelSelectorDialog(JFrame owner, GameManager gameManager, Music musicHall) {
+        try {
+            JDialog dialog = new JDialog(owner, "Chọn màn", JDialog.ModalityType.APPLICATION_MODAL);
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+            JPanel panel = new JPanel(new GridLayout(0, 4, 8, 8));
+            panel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+
+            String levelJsonPath = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json";
+            List<LevelLoader.Level> levels = null;
+            try {
+                levels = LevelLoader.loadLevels(levelJsonPath);
+            } catch (Exception ex) {
+                levels = java.util.Collections.emptyList();
+            }
+
+            int total = Math.max(1, levels.size());
+            for (int i = 0; i < total; i++) {
+                final int idx = i;
+                JButton b = new JButton("Màn " + (i + 1));
+                b.addActionListener(ev -> {
+                    dialog.dispose();
+                    startGame(owner, gameManager, musicHall, idx);
+                });
+                panel.add(b);
+            }
+
+            JButton cancel = new JButton("Hủy");
+            cancel.addActionListener(ev -> dialog.dispose());
+            panel.add(cancel);
+
+            dialog.add(panel);
+            dialog.pack();
+            dialog.setLocationRelativeTo(owner);
+            dialog.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -104,7 +139,7 @@ public class App {
     /**
      * Method để chơi game.
      */
-    private static void startGame(JFrame menuFrame, GameManager gameManager, Music musicHall) {
+    private static void startGame(JFrame menuFrame, GameManager gameManager, Music musicHall, int levelIndex) {
         musicHall.stop();
         Music gameMusic = gameManager.getGameMusic();
         gameMusic.play();
@@ -120,6 +155,15 @@ public class App {
         gameManager.gameThread();
         menuFrame.setVisible(false);
         frame.setVisible(true);
+
+        // Load level được chọn
+        try {
+            gameManager.setLevel(levelIndex);
+            gameManager.restartGame(levelIndex, 0); // load lại game từ màn được chọn
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
 

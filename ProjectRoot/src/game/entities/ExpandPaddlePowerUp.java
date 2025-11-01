@@ -12,7 +12,7 @@ public class ExpandPaddlePowerUp extends PowerUp {
     protected static final float width = 20;
     protected static final float height = 20;
     protected float upgradeWidth;
-    public String newBackGroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\hot.jpg";
+    public String newBackGroundURL = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\hot.jpg";
     GameManager gameManager;
     
 

@@ -18,7 +18,7 @@ public class Ball extends MovableObject {
     protected float defaultX;
     protected float defaultY;
     protected static final float defaultRadius = 20;
-    protected static final float defaultSpeed = 4;
+    protected static final float defaultSpeed = 5;
     protected static final int defaultPowerUp = 1;
     protected Paddle paddle;
     protected static final Color defaultColor_1 = new Color(255, 255, 255);

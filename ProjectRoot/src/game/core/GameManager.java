@@ -5,18 +5,11 @@ import javax.swing.*;
 
 import game.entities.*;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 
@@ -44,9 +37,9 @@ public class GameManager extends JPanel implements Runnable {
     // FPS của trò chơi: (Từng khung hình vẽ trên 1 giây)
     private final int FPS = 60;
     
-    private String backgroundURL = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\base.jpg";
+    private String backgroundURL = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\base.jpg";
     private Image background = new ImageIcon(backgroundURL).getImage();
-    private String gameFrame = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\gameFrame1.jpg";
+    private String gameFrame = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\gameFrame1.jpg";
     private Image gameFrameImage = new ImageIcon(gameFrame).getImage();
 
     // Object theo dõi hoạt động của bàn phím.
@@ -54,24 +47,24 @@ public class GameManager extends JPanel implements Runnable {
 
     // Mạng tối đa của người chơi.
     private int soul = 3;
-    String thHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\3hearts.png";
-    String twHeartsUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\2hearts.png";
-    String onHeartUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\1heart.png";
+    String thHeartsUrl = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\3hearts.png";
+    String twHeartsUrl = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\2hearts.png";
+    String onHeartUrl = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\1heart.png";
     Image heartImage;
     // Level hiện tại của người chơi.
     private int myLevel = 0;
     private boolean winAll = false;
     // Điểm số của người chơi.
     private int myScore = 0;
-    Image scoreImage = new ImageIcon("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\gameboard.png").getImage();
+    Image scoreImage = new ImageIcon("C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\gameboard.png").getImage();
 
     // Khai báo biến map
     private int[][] map;
     // Khai báo biến âm thanh
-    private static String musicUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\gameplay.wav";
-    private String hitPaddleSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
-    private String hitBrickSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
-    private String breakBrickSoundUrl = "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\break_brick.wav";
+    private static String musicUrl = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\gameplay.wav";
+    private String hitPaddleSoundUrl = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
+    private String hitBrickSoundUrl = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\hit_brick.wav";
+    private String breakBrickSoundUrl = "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\sounds\\break_brick.wav";
     Music gameMusicPlay;
 
     // Gọi các đối tượng của class ra
@@ -151,7 +144,7 @@ public class GameManager extends JPanel implements Runnable {
      * Method để load levels từ file JSON
      */
     private void loadLevels(int typeLevel) {
-        List<LevelLoader.Level> levels = LevelLoader.loadLevels("C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
+        List<LevelLoader.Level> levels = LevelLoader.loadLevels("C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\game\\levels\\level.json");
         
         if (!brickList.isEmpty()) {
             brickList.clear();
@@ -160,7 +153,12 @@ public class GameManager extends JPanel implements Runnable {
         if (!strongBList.isEmpty()) {
             strongBList.clear();
         }
-        LevelLoader.Level level = levels.get(typeLevel);
+        // Clamp requested level index into valid range and record it
+        int index = Math.max(0, Math.min(typeLevel, levels.size() - 1));
+        this.myLevel = index;
+
+
+        LevelLoader.Level level = levels.get(index);
         map = level.map;
 
         // In ra để kiểm tra
@@ -245,8 +243,8 @@ public class GameManager extends JPanel implements Runnable {
     String urlSpeakerImage;
     public void updatePlayGameMusic(){
         urlSpeakerImage = (gameMusicPlay.isPlaying())
-                ? "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOn.jpg"
-                : "C:\\Users\\admin\\Documents\\GitHub\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOff.jpg";
+                ? "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOn.jpg"
+                : "C:\\Users\\Admin\\IdeaProjects\\NhomFuHo2005\\ProjectRoot\\src\\assets\\images\\MusicOff.jpg";
         musicButton.setIcon(new ImageIcon(urlSpeakerImage));
     }
 
@@ -531,7 +529,9 @@ public class GameManager extends JPanel implements Runnable {
          */
         this.soul = 3;
         this.myScore = currentScore;
-        
+
+        this.myLevel = Math.max(0, currentLevel);
+
         /**
          * Điều chỉnh âm thanh về mặc định.
          */
@@ -563,7 +563,7 @@ public class GameManager extends JPanel implements Runnable {
         paddlePower = null;
         laserPower = null; // Xóa powerup
         bulletList.clear(); // Xóa hết đạn còn sót lại
-        loadLevels(currentLevel);
+        loadLevels(this.myLevel);
         gameThread();
     }
 
