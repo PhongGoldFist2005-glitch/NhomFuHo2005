@@ -2,25 +2,46 @@ package game.entities;
 
 import java.awt.Graphics2D;
 
-// Xây dựng class Brick.
+/**
+ * Xây dựng class Brick.
+ */
 public class Brick extends GameObject {
-    // Thông tin chứa máu của viên gạch và loại gạch
+    // Thông tin chứa máu của viên gạch và loại gạch.
     protected int hitPoints;
     protected int type;
-
-    public Brick(float x, float y, float width, float height, int hitPoints, int type) {
-        super(x, y, width, height);
+    protected static final float defaultWidth = 48;
+    protected static final float defaultHeight = 24;
+    // Kiểm tra gạch đã bị phá hủy hay chưa.
+    protected boolean check = false;
+    
+    /**
+     * Constructor của gạch.
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param hitPoints
+     * @param type
+     */
+    public Brick(float x, float y, int hitPoints, int type) {
+        super(x, y, defaultWidth, defaultHeight);
         this.hitPoints = hitPoints;
         this.type = type;
     }
 
-    // Kiểm tra xem viên gạch đã bị tấn công bao nhiêu lần để trừ máu
+    /**
+     * Kiểm tra xem viên gạch đã bị tấn công bao nhiêu lần để trừ máu.
+     * @return
+     */
     public boolean takeHit() {
         this.hitPoints -= 1;
-        return isDestroyed(); // Trả về true nếu cú đánh này phá hủy gạch
+        // Trả về true nếu cú đánh này phá hủy gạch.
+        return isDestroyed();
     }
 
-    // Kiểm tra xem viên gạch đã bị tiêu diệt hay chưa
+    /**
+     * Kiểm tra xem viên gạch đã bị tiêu diệt hay chưa.
+     */
     public boolean isDestroyed() {
         if (this.hitPoints == 0) {
             return true;
@@ -28,13 +49,16 @@ public class Brick extends GameObject {
         return false;
     }
 
+    /**
+     * Update viên gạch.
+     */
     @Override
     public void update() {
-        // TODO: Cập nhật trạng thái của viên gạch nếu cần
+        this.check = this.isDestroyed();
     }
 
     @Override
     public void render(Graphics2D g2) {
-        // TODO Auto-generated method stub
+        // Đối với từng loại gạch sẽ có cách hiện thị khác nhau.
     }
 }
