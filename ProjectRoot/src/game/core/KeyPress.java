@@ -16,7 +16,7 @@ public class KeyPress implements KeyListener {
 
     /**
      * Hành động khi nhấc keypass ra.
-     * Pass
+     * Do game không có thao tác nhấc phím.
      */
     @Override
     public void keyTyped(KeyEvent e) {

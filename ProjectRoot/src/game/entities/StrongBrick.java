@@ -5,30 +5,45 @@ import java.awt.Graphics2D;
 
 import game.core.GameManager;
 
-// Xây dựng lớp gạch có máu khỏe hơn
+/**
+ * Xây dựng lớp gạch cứng.
+ */
 public class StrongBrick extends Brick {
+    /**
+     * 2 máu và loại 2 cho 1 viên gạch cứng.
+     */
     protected int defaultHitPoints = 2;
     protected int defaultType = 2;
-    protected float defaultWidth = 48;
-    protected float defaultHeight = 24;
     GameManager gameManager;
-    protected boolean check = false;
 
-    // Gạch thường chỉ có 1 máu và loại 0
+    /**
+     * Constructor cho Gạch cứng.
+     * @param x
+     * @param y
+     * @param gameManager
+     */
     public StrongBrick(float x, float y, GameManager gameManager) {
-        super(x, y, 48, 24, 2, 2);
+        super(x, y, 2, 2);
         this.gameManager = gameManager;
     }
 
+    /**
+     * Reset về default khi restart màn chơi.
+     * @param x
+     * @param y
+     */
     public void resetToDefaultBrick(float x, float y) {
-        this.x = x;
-        this.y = y;
+        this.setX(x);
+        this.setY(y);
         this.width = defaultWidth;
         this.height = defaultHeight;
         this.hitPoints = defaultHitPoints;
         this.type = defaultType;
     }
 
+    /**
+     * Getter & Setter.
+     */
     public void setType(int newType) {
         this.type = newType;
     }
@@ -37,26 +52,12 @@ public class StrongBrick extends Brick {
         return this.type;
     }
 
-    public float getX() {
-        return this.x;
-    }
-
-    public float getY() {
-        return this.y;
-    }
-
-    @Override
-    public void update() {
-        // TODO: Cập nhật trạng thái của gạch
-        this.check = this.isDestroyed();
-    }
-
+    /**
+     * Vẽ viên gạch cứng.
+     */
     @Override
     public void render(Graphics2D g2) {
-        // TODO: Vẽ gạch lên màn hình
         if (this.check == false) {
-
-            // --- BẮT ĐẦU THAY ĐỔI ---
             if (this.hitPoints == 2) {
                 // Gạch còn 2 máu, vẽ màu xanh
                 g2.setColor(Color.decode("#33CCFF"));
@@ -64,9 +65,8 @@ public class StrongBrick extends Brick {
                 // Gạch còn 1 máu, vẽ màu hồng (giống NormalBrick)
                 g2.setColor(Color.decode("#FF99CC"));
             }
-            // --- KẾT THÚC THAY ĐỔI ---
 
-            g2.fillRect((int) this.x,(int) this.y,(int) this.width,(int) this.height);
+            g2.fillRect((int) this.getX(),(int) this.getY(),(int) this.width,(int) this.height);
         }
     }
 }
