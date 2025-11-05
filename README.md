@@ -7,7 +7,10 @@ Chủ đề của bài tập lớn là phát triển trò chơi Arkanoid, một 
 
 ---
 
-<img src="ProjectRoot\src\assets\images\image.png" alt="Game Menu" width="500"/>
+<p align="center">
+  <img src="src/assets/images/image.png" alt="Game Menu" width="500"/>
+</p>
+
 
 </div>
 
