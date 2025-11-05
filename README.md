@@ -163,8 +163,8 @@ Vẽ lại toàn bộ khung hình (Canvas/Graphics2D).
 | Vai trò        | Tên                     | GitHub                                             |
 | -------------- | -------------------     | -------------------------------------------------- |
 | 👑 Trưởng nhóm | **Nguyễn Thế Phong**    | [@PhongGoldFist2005-glitch](https://github.com/PhongGoldFist2005-glitch)       |
-| 🧩 Thành viên  | **Trịnh Quang Sang**    | [@23020867-boop](https://github.com/23020867-boop)           |
-| 🧱 Thành viên  | **Phùng Văn Quang**     | [@23020871-Tamphung](https://github.com/23020871-Tamphung) |
+| 🧩 Thành viên  | **Trịnh Quang Sáng**    | [@23020867-boop](https://github.com/23020867-boop)           |
+| 🧱 Thành viên  | **Phùng Khắc Tâm**     | [@23020871-Tamphung](https://github.com/23020871-Tamphung) |
 
 🪪 License
 
