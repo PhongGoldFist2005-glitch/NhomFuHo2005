@@ -52,82 +52,51 @@ Người chơi điều khiển thanh **Paddle** để đập bóng phá gạch, 
 project-root/
 │
 ├── src/
-│   └── game/
-│       ├── core/
-│       │   ├── App.java             # Chạy game (main frame)
-│       │   ├── GameManager.java     # Quản lý vòng lặp game, đối tượng
-│       │   ├── LevelLoader.java     # Nạp dữ liệu màn chơi
-│       │   ├── KeyPress.java        # Xử lý bàn phím
-│       │   ├── Music.java           # Xử lý âm thanh nền
-│       │   └── EndGame.java         # Màn hình kết thúc
-│       │
-│       ├── entities/                # Các thực thể trong game
-│       │   ├── GameObject.java      # Đối tượng chung trong game
-│       │   ├── MovableObject.java   # Đối tượng chung có thể di chuyển được trong game
-│       │   ├── Ball.java            # Đối tượng bóng trong game
-│       │   ├── Paddle.java          # Đối tượng paddle trong game
-│       │   ├── Brick.java           # Đối tượng gạch trong game
-│       │   ├── NormalBrick.java     # Đối tượng gạch thường
-│       │   ├── StrongBrick.java     # Đối tượng gạch cứng
-│       │   ├── PowerUp.java         # Đối tượng power up chung
-│       │   ├── ExpandPaddlePowerUp.java # Đối tượng power up tăng kích thước ván
-│       │   ├── FastBallPowerUp.java     # Đối tượng power up tăng tốc độ bóng
-│       │   ├── LaserPaddlePowerUp.java  # Đối tượng power up bắn đạn laze
-│       │   └── Bullet.java              # Đối tượng đạn của power up bắn laze
-│       │
-│       ├── levels/                  # Dữ liệu và logic màn chơi
-│       │   ├── Level.json           # 10 màn
-│       │
-│       ├── ui/
-│       │
-│       └── utils/
+│ └── game/
+│ ├── core/
+│ │ ├── App.java # Chạy game (main frame)
+│ │ ├── GameManager.java # Quản lý vòng lặp game, đối tượng
+│ │ ├── LevelLoader.java # Nạp dữ liệu màn chơi
+│ │ ├── KeyPress.java # Xử lý bàn phím
+│ │ ├── Music.java # Xử lý âm thanh nền
+│ │ └── EndGame.java # Màn hình kết thúc
+│ │
+│ ├── entities/ # Các thực thể trong game
+│ │ ├── GameObject.java
+│ │ ├── MovableObject.java
+│ │ ├── Ball.java
+│ │ ├── Paddle.java
+│ │ ├── Brick.java
+│ │ ├── NormalBrick.java
+│ │ ├── StrongBrick.java
+│ │ ├── PowerUp.java
+│ │ ├── ExpandPaddlePowerUp.java
+│ │ ├── FastBallPowerUp.java
+│ │ ├── LaserPaddlePowerUp.java
+│ │ └── Bullet.java
+│ │
+│ ├── levels/
+│ │ └── Level.json # 10 màn
+│ │
+│ ├── ui/
+│ └── utils/
 │
-├── assets/                          # Tài nguyên game
-│   ├── images/
-|   |   ├── 1heart.png
-|   |   ├── 2 hearts.png
-|   |   ├── 3 hearts.png
-|   |   ├── audio.png
-|   |   ├── base.png
-|   |   ├── bullet.png
-|   |   ├── cool.png
-|   |   ├── exit.png
-|   |   ├── expand_powerup.png
-|   |   ├── fastball_powerup.png
-|   |   ├── gameboard.png
-|   |   ├── gameFrame1.png
-|   |   ├── guard.jpg
-|   |   ├── hot.jpg
-|   |   ├── laser_powerup.png
-|   |   ├── MainScreen.jpeg
-|   |   ├── MenuBackground.png
-|   |   ├── musicOff.png
-|   |   ├── musicOn.png
-|   |   ├── paddle.png
-|   |   ├── play.png
-│   │   ├── ball.png
-│   │
-│   ├── sounds/                      # Âm thanh
-│   │   ├── background.wav
-│   │   ├── break_brick.wav
-│   │   ├── powerup.wav
-│   │   ├── hit_brick.wav
-│   │   └── gameplay.mp3
-│   │
-│   └── fonts/                       # Font chữ tùy chỉnh
-│       └── arcade.ttf
+├── assets/
+│ ├── images/
+│ ├── sounds/
+│ └── fonts/
 │
-├── lib/                             # Thư viện ngoài (nếu có)
-│   └── gson-2.11.0.jar
+├── lib/
+│ └── gson-2.11.0.jar
 │
-├── docs/                            # Tài liệu thiết kế, hướng dẫn
-│   ├── UML diagrams.pdf
-│   └── folderMap.txt
+├── docs/
+│ ├── UML diagrams.pdf
+│ └── folderMap.txt
 │
 ├── build/
 │
 ├── config.json
-└── README.md                        # Hướng dẫn cài đặt & chơi game
+└── README.md
 
 ## 🧰 Yêu cầu hệ thống  
 
