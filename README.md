@@ -49,6 +49,7 @@ Người chơi điều khiển thanh **Paddle** để đập bóng phá gạch, 
 ---
 
 ## 🧩 Cấu trúc dự án  
+```bash
 project-root/
 │
 ├── src/
@@ -98,7 +99,7 @@ project-root/
 │
 ├── config.json
 └── README.md
-
+```
 
 ## 🧰 Yêu cầu hệ thống  
 
