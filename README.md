@@ -52,51 +52,53 @@ Người chơi điều khiển thanh **Paddle** để đập bóng phá gạch, 
 project-root/
 │
 ├── src/
-│ └── game/
-│ ├── core/
-│ │ ├── App.java # Chạy game (main frame)
-│ │ ├── GameManager.java # Quản lý vòng lặp game, đối tượng
-│ │ ├── LevelLoader.java # Nạp dữ liệu màn chơi
-│ │ ├── KeyPress.java # Xử lý bàn phím
-│ │ ├── Music.java # Xử lý âm thanh nền
-│ │ └── EndGame.java # Màn hình kết thúc
-│ │
-│ ├── entities/ # Các thực thể trong game
-│ │ ├── GameObject.java
-│ │ ├── MovableObject.java
-│ │ ├── Ball.java
-│ │ ├── Paddle.java
-│ │ ├── Brick.java
-│ │ ├── NormalBrick.java
-│ │ ├── StrongBrick.java
-│ │ ├── PowerUp.java
-│ │ ├── ExpandPaddlePowerUp.java
-│ │ ├── FastBallPowerUp.java
-│ │ ├── LaserPaddlePowerUp.java
-│ │ └── Bullet.java
-│ │
-│ ├── levels/
-│ │ └── Level.json # 10 màn
-│ │
-│ ├── ui/
-│ └── utils/
+│   └── game/
+│       ├── core/
+│       │   ├── App.java                  # Chạy game (main frame)
+│       │   ├── GameManager.java          # Quản lý vòng lặp game, đối tượng
+│       │   ├── LevelLoader.java          # Nạp dữ liệu màn chơi
+│       │   ├── KeyPress.java             # Xử lý bàn phím
+│       │   ├── Music.java                # Xử lý âm thanh nền
+│       │   └── EndGame.java              # Màn hình kết thúc
+│       │
+│       ├── entities/                     # Các thực thể trong game
+│       │   ├── GameObject.java
+│       │   ├── MovableObject.java
+│       │   ├── Ball.java
+│       │   ├── Paddle.java
+│       │   ├── Brick.java
+│       │   ├── NormalBrick.java
+│       │   ├── StrongBrick.java
+│       │   ├── PowerUp.java
+│       │   ├── ExpandPaddlePowerUp.java
+│       │   ├── FastBallPowerUp.java
+│       │   ├── LaserPaddlePowerUp.java
+│       │   └── Bullet.java
+│       │
+│       ├── levels/
+│       │   └── Level.json                # 10 màn (dữ liệu màn chơi)
+│       │
+│       ├── ui/                           # Giao diện người dùng
+│       │
+│       └── utils/                        # Tiện ích, constants, helper
 │
-├── assets/
-│ ├── images/
-│ ├── sounds/
-│ └── fonts/
+├── assets/                               # Tài nguyên game
+│   ├── images/
+│   ├── sounds/
+│   └── fonts/
 │
 ├── lib/
-│ └── gson-2.11.0.jar
+│   └── gson-2.11.0.jar
 │
 ├── docs/
-│ ├── UML diagrams.pdf
-│ └── folderMap.txt
+│   ├── UML diagrams.pdf
+│   └── folderMap.txt
 │
 ├── build/
 │
 ├── config.json
 └── README.md
+
 
 ## 🧰 Yêu cầu hệ thống  
 
